@@ -1,5 +1,7 @@
 <template>
-    <router-view></router-view>
+    <div class="tw-container tw-m-auto">
+        <router-view></router-view>
+    </div>
 </template>
 
 <script>

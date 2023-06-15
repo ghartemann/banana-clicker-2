@@ -4,6 +4,12 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Grandstander:ital,wght@0,400;0,700;1,100&display=swap");
 
+#app {
+    background: url("../images/bg.jpg") center center;
+    background-size: cover;
+    height: 100vh;
+}
+
 body {
     font-family: 'Grandstander', Helvetica, sans-serif;
 }
