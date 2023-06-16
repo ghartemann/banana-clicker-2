@@ -16,7 +16,7 @@
                                 :module="bpsModule"
                                 type="bps"
                                 @buy="(module, type) => buyModule(module, type)"
-                                @buy-multiple="(module, type, n) => buyNTimes(n, module, type)">
+                                @buy-multiple="(module, type, n) => buyNTimes(module, type, n)">
                         </module-button>
                     </template>
                 </div>
@@ -76,12 +76,23 @@
                 <h2 class="tw-text-4xl tw-text-white tw-font-bold">Améliorations</h2>
 
                 <div class="tw-flex tw-flex-col tw-gap-4">
-                    <module-button v-for="bpcModule in bpcModules"
-                                   :bananas="bananas"
-                                   :module="bpcModule"
-                                   type="bpc"
-                                   @buy="(module, type) => buyModule(module, type)">
-                    </module-button>
+                    <template v-for="(bpcModule, index) in bpcModules" :key="index">
+                        <module-button
+                            :bananas="bananas"
+                            :module="bpcModule"
+                            type="bpc"
+                            @buy="(module, type) => buyModule(module, type)">
+                        </module-button>
+                    </template>
+
+                    <template v-for="(bpsBuffsModule, index) in bpsBuffsModules" :key="index">
+                        <module-button
+                            :bananas="bananas"
+                            :module="bpsBuffsModule"
+                            type="buff"
+                            @buy="(module, type) => buyModule(module, type)">
+                        </module-button>
+                    </template>
                 </div>
             </div>
         </div>
@@ -116,8 +127,9 @@ export default defineComponent({
                 {
                     name: 'Auto Clicker',
                     article: 'un',
-                    description: 'Un curseur qui clique tout seul comme un grand. Si vous êtes un tant soit peu impressionnable ça vous fera peut-être quelque chose.',
-                    picture: 'autoclicker',
+                    description: 'Un curseur qui clique tout seul comme un grand. Si vous êtes un tant soit peu ' +
+                        'impressionnable ça vous fera peut-être quelque chose.',
+                    slug: 'autoclicker',
                     price: {
                         current: 10,
                         base: 10,
@@ -132,8 +144,10 @@ export default defineComponent({
                 {
                     name: 'Bananier',
                     article: 'un',
-                    description: "Un bananier. Qui produit des bananes. Écoutez c'est un arbre, il n'y a pas non plus un million de choses à dire dessus. Si vous êtes plus impressionné.e par ça que par l'auto clicker je pense qu'il faudrait songer à arrêter de jouer dès maintenant.",
-                    picture: 'bananier',
+                    description: "Un bananier. Qui produit des bananes. Écoutez c'est un arbre, il n'y a pas non plus un " +
+                        "million de choses à dire dessus. Si vous êtes plus impressionné.e par ça que par l'auto clicker, " +
+                        "il faudrait peut-être songer à arrêter de jouer dès maintenant.",
+                    slug: 'bananier',
                     price: {
                         current: 500,
                         base: 500,
@@ -148,8 +162,9 @@ export default defineComponent({
                 {
                     name: 'Macaque',
                     article: 'un',
-                    description: 'Un macaque qui ramasse des bananes. On le paie une misère et il ne semble pas s\'en plaindre mais niveau efficacité on repassera.',
-                    picture: 'macaque',
+                    description: 'Un macaque qui ramasse des bananes. On le paie une misère et il ne semble pas s\'en ' +
+                        'plaindre mais niveau efficacité on repassera.',
+                    slug: 'macaque',
                     price: {
                         current: 1000,
                         base: 1000,
@@ -167,13 +182,33 @@ export default defineComponent({
                     name: 'Meilleur curseur',
                     article: 'un',
                     description: '',
-                    picture: '',
+                    slug: '',
                     price: {
                         current: 200,
                         base: 200,
                         multiplier: 1.2,
                     },
                     bpc: 1,
+                    numberBought: 0
+                }
+            ],
+            bpsBuffsModules: [
+                {
+                    name: 'Sac d\'engrais Monsanto™',
+                    article: 'un',
+                    description: 'Du bon engrais Monsanto chargé de pesticides pour rendre vos bananiers plus grands, ' +
+                        'plus forts, plus productifs et plus intelligents. Un outil idéal pour tout éleveur de bananes ' +
+                        'en herbe – si le risque élevé de cancer de la gorge, des intestins ou du colon vous importe peu.',
+                    slug: 'engrais-monsanto',
+                    price: {
+                        current: 6666,
+                        base: 6666,
+                        multiplier: 1.2,
+                    },
+                    moduleToModify: {
+                        slug: 'bananier',
+                        multiplier: 1.3
+                    },
                     numberBought: 0
                 }
             ],
@@ -208,11 +243,11 @@ export default defineComponent({
                     this.bpc += module.bpc;
                 }
 
-                module.price.current = Math.round(module.price.current * module.price.multiplier);
+                module.price.current = module.price.current * module.price.multiplier;
                 module.numberBought++;
             }
         },
-        buyNTimes(n, module, type) {
+        buyNTimes(module, type, n) {
             for (let i = 0; i < n; i++) {
                 this.buyModule(module, type);
             }

@@ -7,11 +7,11 @@
                         class="tw-flex tw-w-full tw-text-xl tw-rounded-2xl tw-relative tw-p-3 tw-cursor-pointer tw-shadow-lg disabled:tw-bg-opacity-50 hover:tw-brightness-110 disabled:tw-cursor-not-allowed"
                         :class="type === 'bps' ? 'tw-bg-green-dark tw-col-span-9' : 'tw-bg-yellow-dark tw-col-span-12'"
                 >
-                    <div class="tw-w-1/4">
-                        <img src="../../../../images/bps/autoclicker.png" :alt="module.picture" class="tw-w-14 tw-h-14 tw-mr-5">
+                    <div class="tw-w-1/5">
+                        <img src="../../../../images/bps/autoclicker.png" :alt="module.slug" class="tw-w-14 tw-h-14 tw-mr-5">
                     </div>
 
-                    <div class="tw-w-3/4 tw-flex tw-flex-col tw-items-start tw-text-start tw-text-white">
+                    <div class="tw-w-4/5 tw-flex tw-flex-col tw-items-start tw-text-start tw-text-white">
                         <div>
                             Acheter {{ module.article }} <span class="tw-font-bold">{{ module.name }}</span>
                         </div>
@@ -25,7 +25,7 @@
                             {{ returnNiceNumber(module.price.current) }}
                         </div>
 
-                        <div class="tw-absolute tw-right-0 tw-bottom-0">
+                        <div class="tw-absolute tw-right-2 tw-bottom-1 tw-opacity-50">
                             {{ module.numberBought }}
                         </div>
                     </div>
