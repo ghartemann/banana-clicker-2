@@ -2,9 +2,10 @@
     <v-tooltip right color="red" content-class='custom-tooltip'>
         <template v-slot:activator="{ props }">
             <div v-bind="props" class="tw-grid tw-grid-cols-12 tw-gap-4">
-                <button @click="$emit('buy', module)"
+                <button @click="$emit('buy', module, type)"
                         :disabled="bananas < module.price.current"
-                        class="tw-col-span-9 tw-flex tw-w-full tw-text-xl tw-rounded-2xl tw-relative tw-p-3 tw-cursor-pointer tw-shadow-lg tw-bg-green-dark disabled:tw-opacity-50 hover:tw-brightness-110 disabled:tw-cursor-not-allowed"
+                        class="tw-flex tw-w-full tw-text-xl tw-rounded-2xl tw-relative tw-p-3 tw-cursor-pointer tw-shadow-lg disabled:tw-bg-opacity-50 hover:tw-brightness-110 disabled:tw-cursor-not-allowed"
+                        :class="type === 'bps' ? 'tw-bg-green-dark tw-col-span-9' : 'tw-bg-yellow-dark tw-col-span-12'"
                 >
                     <div class="tw-w-1/4">
                         <img src="../../../../images/bps/autoclicker.png" :alt="module.picture" class="tw-w-14 tw-h-14 tw-mr-5">
@@ -30,10 +31,10 @@
                     </div>
                 </button>
 
-                <button @click="$emit('buy-multiple', module, 10)"
+                <button @click="$emit('buy-multiple', module, type, 10)"
                         v-if="type === 'bps'"
                         :disabled="bananas < priceForTenModules(module.price.current)"
-                        class="tw-col-span-3 tw-rounded-2xl tw-p-3 tw-cursor-pointer tw-shadow-lg tw-bg-green-dark disabled:tw-opacity-50 hover:tw-brightness-110 disabled:tw-cursor-not-allowed tw-text-white"
+                        class="tw-col-span-3 tw-rounded-2xl tw-p-3 tw-cursor-pointer tw-shadow-lg tw-bg-green-dark disabled:tw-bg-opacity-50 hover:tw-brightness-110 disabled:tw-cursor-not-allowed tw-text-white"
                 >
                     <div>x 10</div>
 

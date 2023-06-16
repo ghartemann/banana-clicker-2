@@ -1,10 +1,12 @@
 <template>
     <div class="tw-max-w-full tw-m-auto">
-        <h1 class="tw-text-6xl tw-text-center tw-py-10 tw-text-green-dark tw-font-medium">Banana Clicker <span class="tw-text-yellow-dark">2</span></h1>
+        <h1 class="tw-text-6xl tw-text-center tw-py-10 tw-text-green-dark tw-font-medium">
+            Banana Clicker <span class="tw-text-yellow-dark tw-font-bold">2</span>
+        </h1>
 
         <div class="tw-grid tw-grid-cols-3 tw-gap-10">
             <div class="tw-col-span-1 tw-flex tw-flex-col tw-gap-5">
-                <h2 class="tw-text-4xl tw-text-green-dark">Magasin</h2>
+                <h2 class="tw-text-4xl tw-text-white tw-font-bold">Magasin</h2>
 
                 <div class="tw-flex tw-flex-col tw-gap-4">
                     <template v-for="(bpsModule, index) in bpsModules" :key="index">
@@ -13,8 +15,8 @@
                                 :bananas="bananas"
                                 :module="bpsModule"
                                 type="bps"
-                                @buy="(module) => buyBpsModule(module)"
-                                @buy-multiple="(module, n) => buyNTimes(n, module)">
+                                @buy="(module, type) => buyModule(module, type)"
+                                @buy-multiple="(module, type, n) => buyNTimes(n, module, type)">
                         </module-button>
                     </template>
                 </div>
@@ -25,15 +27,17 @@
                     <img src="../../../images/banane.png" alt="Banana" class="tw-w-36 tw-h-36 ">
                 </button>
 
-                <div class="tw-flex tw-flex-col tw-gap-5">
-                    <div>
+                <div class="tw-w-full tw-flex tw-flex-col tw-gap-5 tw-items-center">
+                    <div class="tw-text-white">
                         <div class="tw-font-bold tw-text-6xl tw-text-white">
                             {{ returnNiceNumber(bananas) }}
                         </div>
 
                         <v-tooltip right color="red" content-class='custom-tooltip'>
                             <template v-slot:activator="{ props }">
-                                <div v-bind="props">BPS : {{ bps }}</div>
+                                <div v-bind="props">
+                                    BPS : <span class="tw-font-bold">{{ bps }}</span>
+                                </div>
                             </template>
 
                             <span>Bananes Par Seconde</span>
@@ -41,18 +45,24 @@
 
                         <v-tooltip right color="red" content-class='custom-tooltip'>
                             <template v-slot:activator="{ props }">
-                                <div v-bind="props">BPC : {{ bpc }}</div>
+                                <div v-bind="props">
+                                    BPC : <span class="tw-font-bold">{{ bpc }}</span>
+                                </div>
                             </template>
 
                             <span>Bananes Par Clic</span>
                         </v-tooltip>
 
-                        <div>Total : {{ returnNiceNumber(totalBananas) }}</div>
+                        <div>
+                            Total : <span class="tw-font-bold">{{ returnNiceNumber(totalBananas) }}</span>
+                        </div>
 
-                        <div>Nombre de clics : {{ returnNiceNumber(nbClicks) }}</div>
+                        <div>
+                            Nombre de clics : <span class="tw-font-bold">{{ returnNiceNumber(nbClicks) }}</span>
+                        </div>
                     </div>
 
-                    <div class="tw-flex tw-flex-col tw-gap-1">
+                    <div class="tw-flex tw-flex-col tw-gap-1 tw-w-1/2">
                         <div>DEBUG</div>
                         <button @click="save" class="tw-bg-blue-100 tw-rounded-md">Save</button>
                         <button @click="load" class="tw-bg-blue-100 tw-rounded-md">Load</button>
@@ -63,14 +73,14 @@
             </div>
 
             <div class="tw-col-span-1 tw-flex tw-flex-col tw-gap-5">
-                <h2 class="tw-text-4xl tw-text-green-dark">Améliorations</h2>
+                <h2 class="tw-text-4xl tw-text-white tw-font-bold">Améliorations</h2>
 
                 <div class="tw-flex tw-flex-col tw-gap-4">
                     <module-button v-for="bpcModule in bpcModules"
                                    :bananas="bananas"
                                    :module="bpcModule"
                                    type="bpc"
-                                   @buy="(module) => buyBpcModule(module)">
+                                   @buy="(module, type) => buyModule(module, type)">
                     </module-button>
                 </div>
             </div>
@@ -188,27 +198,23 @@ export default defineComponent({
             this.totalBananas += this.bpc;
             this.nbClicks++;
         },
-        buyBpsModule(module) {
+        buyModule(module, type) {
             if (this.bananas >= module.price.current) {
                 this.bananas -= module.price.current;
-                this.bps += module.bps.current;
 
-                module.price.current = Math.round(module.price.current * 1.2);
+                if (type === 'bps') {
+                    this.bps += module.bps.current;
+                } else if (type === 'bpc') {
+                    this.bpc += module.bpc;
+                }
+
+                module.price.current = Math.round(module.price.current * module.price.multiplier);
                 module.numberBought++;
             }
         },
-        buyNTimes(n, module) {
+        buyNTimes(n, module, type) {
             for (let i = 0; i < n; i++) {
-                this.buyBpsModule(module);
-            }
-        },
-        buyBpcModule(module) {
-            if (this.bananas >= module.price) {
-                this.bananas -= module.price;
-                this.bpc += module.bpc;
-
-                module.price = Math.round(module.price * 1.3);
-                module.numberBought++;
+                this.buyModule(module, type);
             }
         },
         startBPS() {
