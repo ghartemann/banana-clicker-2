@@ -17,7 +17,15 @@
                         </div>
 
                         <div v-if="type === 'bps'">
-                            +{{ module.bps.current }} BPS
+                            +{{ returnNiceNumber(module.bps.current) }} BPS
+                        </div>
+
+                        <div v-else-if="type === 'bpc'">
+                            +{{ returnNiceNumber(module.bpc) }} BPC
+                        </div>
+
+                        <div v-else-if="type === 'buff'">
+                            bps / {{ module.moduleToModify.slug }} +{{ returnPercentage(module.moduleToModify.multiplier) }}%
                         </div>
 
                         <div class="tw-flex tw-gap-2 tw-items-center">
@@ -98,6 +106,9 @@ export default defineComponent({
                 }).format(number / 1000000) + 'M';
             }
         },
+        returnPercentage(number) {
+            return number * 100 - 100;
+        }
     }
 })
 </script>

@@ -6,9 +6,11 @@
 
         <div class="tw-grid tw-grid-cols-3 tw-gap-10">
             <div class="tw-col-span-1 tw-flex tw-flex-col tw-gap-5">
-                <h2 class="tw-text-4xl tw-text-white tw-font-bold">Magasin</h2>
+                <h2 class="tw-text-4xl tw-text-white tw-font-bold">
+                    Magasin
+                </h2>
 
-                <div class="tw-flex tw-flex-col tw-gap-4">
+                <div v-if="bpsModules[0].numberBought > 0 || bananas >= 30" class="tw-flex tw-flex-col tw-gap-4">
                     <template v-for="(bpsModule, index) in bpsModules" :key="index">
                         <module-button
                                 v-if="index === 0 || (index > 0 && bpsModules[index - 1].numberBought > 0)"
@@ -20,6 +22,8 @@
                         </module-button>
                     </template>
                 </div>
+
+                <div v-else class="tw-text-2xl tw-text-white">Cliquez sur la banane.</div>
             </div>
 
             <div class="tw-col-span-1 tw-flex tw-flex-col tw-items-center tw-text-center animate-bounce delay-150 duration-300">
@@ -36,7 +40,7 @@
                         <v-tooltip right color="red" content-class='custom-tooltip'>
                             <template v-slot:activator="{ props }">
                                 <div v-bind="props">
-                                    BPS : <span class="tw-font-bold">{{ bps }}</span>
+                                    BPS : <span class="tw-font-bold">{{ returnNiceNumber(bps) }}</span>
                                 </div>
                             </template>
 
@@ -46,7 +50,7 @@
                         <v-tooltip right color="red" content-class='custom-tooltip'>
                             <template v-slot:activator="{ props }">
                                 <div v-bind="props">
-                                    BPC : <span class="tw-font-bold">{{ bpc }}</span>
+                                    BPC : <span class="tw-font-bold">{{ returnNiceNumber(bpc) }}</span>
                                 </div>
                             </template>
 
@@ -73,7 +77,9 @@
             </div>
 
             <div class="tw-col-span-1 tw-flex tw-flex-col tw-gap-5">
-                <h2 class="tw-text-4xl tw-text-white tw-font-bold">Améliorations</h2>
+                <h2 class="tw-text-4xl tw-text-white tw-font-bold">
+                    Améliorations
+                </h2>
 
                 <div class="tw-flex tw-flex-col tw-gap-4">
                     <template v-for="(bpcModule, index) in bpcModules" :key="index">
@@ -131,8 +137,8 @@ export default defineComponent({
                         'impressionnable ça vous fera peut-être quelque chose.',
                     slug: 'autoclicker',
                     price: {
-                        current: 10,
-                        base: 10,
+                        current: 50,
+                        base: 50,
                         multiplier: 1.1,
                     },
                     bps: {
@@ -233,24 +239,14 @@ export default defineComponent({
             this.totalBananas += this.bpc;
             this.nbClicks++;
         },
-        buyModule(module, type) {
-            if (this.bananas >= module.price.current) {
-                this.bananas -= module.price.current;
+        calcBPS() {
+            let bps = 0;
 
-                if (type === 'bps') {
-                    this.bps += module.bps.current;
-                } else if (type === 'bpc') {
-                    this.bpc += module.bpc;
-                }
+            this.bpsModules.forEach(module => {
+                bps += module.bps.current * module.numberBought;
+            });
 
-                module.price.current = module.price.current * module.price.multiplier;
-                module.numberBought++;
-            }
-        },
-        buyNTimes(module, type, n) {
-            for (let i = 0; i < n; i++) {
-                this.buyModule(module, type);
-            }
+            return bps;
         },
         startBPS() {
             setInterval(() => {
@@ -258,19 +254,29 @@ export default defineComponent({
                 this.totalBananas += this.bps / 20;
             }, 50)
         },
-        returnNiceNumber(number) {
-            if (number < 1000000) {
-                return new Intl.NumberFormat('fr-FR').format(Math.round(number));
-            } else if (number < 1000000000) {
-                return new Intl.NumberFormat('fr-FR', {
-                    maximumFractionDigits: 3,
-                    minimumFractionDigits: 3
-                }).format(number / 1000000) + 'M';
-            } else if (number >= 1000000000 ) {
-                return new Intl.NumberFormat('fr-FR', {
-                    maximumFractionDigits: 3,
-                    minimumFractionDigits: 3
-                }).format(number / 1000000000) + 'B';
+        buyModule(module, type) {
+            if (this.bananas >= module.price.current) {
+                this.bananas -= module.price.current;
+
+                module.numberBought++;
+
+                if (type === 'bps') {
+                    this.bps = this.calcBPS();
+                } else if (type === 'bpc') {
+                    this.bpc += module.bpc;
+                } else if (type === 'buff') {
+                    let moduleToModify = this.bpsModules.find(bpsModule => bpsModule.slug === module.moduleToModify.slug);
+                    moduleToModify.bps.current *= module.moduleToModify.multiplier;
+
+                    this.bps = this.calcBPS();
+                }
+
+                module.price.current = module.price.current * module.price.multiplier;
+            }
+        },
+        buyNTimes(module, type, n) {
+            for (let i = 0; i < n; i++) {
+                this.buyModule(module, type);
             }
         },
         startAutomaticSaving() {
@@ -330,7 +336,22 @@ export default defineComponent({
         cheat() {
             this.bananas += 1000000;
             this.totalBananas += 1000000;
-        }
+        },
+        returnNiceNumber(number) {
+            if (number < 1000000) {
+                return new Intl.NumberFormat('fr-FR').format(Math.round(number));
+            } else if (number < 1000000000) {
+                return new Intl.NumberFormat('fr-FR', {
+                    maximumFractionDigits: 3,
+                    minimumFractionDigits: 3
+                }).format(number / 1000000) + 'M';
+            } else if (number >= 1000000000 ) {
+                return new Intl.NumberFormat('fr-FR', {
+                    maximumFractionDigits: 3,
+                    minimumFractionDigits: 3
+                }).format(number / 1000000000) + 'B';
+            }
+        },
     }
 })
 </script>
