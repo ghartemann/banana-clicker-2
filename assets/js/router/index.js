@@ -1,6 +1,7 @@
 import * as VueRouter from "vue-router";
 
-import Home from "@pages/Home";
+import Home from "@pages/home";
+import Clique from "@pages/clique";
 import NotFound from "@pages/Not-Found";
 
 const routes = [
@@ -8,6 +9,11 @@ const routes = [
         path: "/",
         name: "homepage",
         component: Home,
+    },
+    {
+        path: "/clique",
+        name: "clique",
+        component: Clique,
     },
     // insert new routes here
     {

@@ -1,6 +1,6 @@
 <template>
     <div class="w-full flex justify-center items-center">
-        <h1 class="text-9xl">404</h1>
+        <h1 class="tw-text-9xl tw-text-white">404</h1>
     </div>
 </template>
 

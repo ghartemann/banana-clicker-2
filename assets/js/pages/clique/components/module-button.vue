@@ -3,7 +3,7 @@
         <template v-slot:activator="{ props }">
             <div v-bind="props" class="tw-grid tw-grid-cols-12 tw-gap-4">
                 <button @click="$emit('buy', module, type)"
-                        :disabled="bananas < module.price.current"
+                        :disabled="bananas < module.price.current || module.numberBought >= module.max"
                         class="tw-flex tw-w-full tw-text-xl tw-rounded-2xl tw-relative tw-p-3 tw-cursor-pointer tw-shadow-lg disabled:tw-bg-opacity-50 hover:tw-brightness-110 disabled:tw-cursor-not-allowed"
                         :class="type === 'bps' ? 'tw-bg-green-dark tw-col-span-9' : 'tw-bg-yellow-dark tw-col-span-12'"
                 >
@@ -12,29 +12,29 @@
                     </div>
 
                     <div class="tw-w-4/5 tw-flex tw-flex-col tw-items-start tw-text-start tw-text-white">
-                        <div>
+                        <div class="tw-text-xl">
                             Acheter {{ module.article }} <span class="tw-font-bold">{{ module.name }}</span>
                         </div>
 
-                        <div v-if="type === 'bps'">
+                        <div v-if="type === 'bps'" class="tw-text-lg">
                             +{{ returnNiceNumber(module.bps.current) }} BPS
                         </div>
 
-                        <div v-else-if="type === 'bpc'">
+                        <div v-else-if="type === 'bpc'" class="tw-text-lg">
                             +{{ returnNiceNumber(module.bpc) }} BPC
                         </div>
 
-                        <div v-else-if="type === 'buff'">
+                        <div v-else-if="type === 'buff'" class="tw-text-lg">
                             bps / {{ module.moduleToModify.slug }} +{{ returnPercentage(module.moduleToModify.multiplier) }}%
                         </div>
 
-                        <div class="tw-flex tw-gap-2 tw-items-center">
+                        <div class="tw-flex tw-gap-2 tw-items-center tw-text-lg">
                             <img src="../../../../images/banane.png" alt="Banana" class="tw-w-4 tw-h-4">
                             {{ returnNiceNumber(module.price.current) }}
                         </div>
 
                         <div class="tw-absolute tw-right-2 tw-bottom-1 tw-opacity-50">
-                            {{ module.numberBought }}
+                            {{ module.numberBought === module.max ? 'MAX' : module.numberBought }}
                         </div>
                     </div>
                 </button>
