@@ -13,11 +13,11 @@
                 <div v-if="bpsModules[0].numberBought > 0 || bananas >= 30" class="tw-flex tw-flex-col tw-gap-4">
                     <template v-for="(bpsModule, index) in bpsModules" :key="index">
                         <module-button
-                                v-if="index === 0 || (index > 0 && bpsModules[index - 1].numberBought > 0)"
+                                v-if="bpsModule.unlocked === true"
                                 :bananas="bananas"
                                 :module="bpsModule"
                                 type="bps"
-                                @buy="(module, type) => buyModule(module, type)"
+                                @buy="(module, type) => buyModule(module, type, index)"
                                 @buy-multiple="(module, type, n) => buyNTimes(module, type, n)">
                         </module-button>
                     </template>
@@ -93,6 +93,7 @@
 
                     <template v-for="(bpsBuffsModule, index) in bpsBuffsModules" :key="index">
                         <module-button
+                            v-if="bpsBuffsModule.unlocked === true"
                             :bananas="bananas"
                             :module="bpsBuffsModule"
                             type="buff"
@@ -117,7 +118,7 @@
 
 <script>
 import {defineComponent} from 'vue'
-import ModuleButton from "./components/module-button.vue";
+import ModuleButton from "./components/module-button";
 
 export default defineComponent({
     name: "Home",
@@ -145,6 +146,7 @@ export default defineComponent({
                         current: 1,
                         base: 1,
                     },
+                    unlocked: true,
                     numberBought: 0
                 },
                 {
@@ -163,6 +165,7 @@ export default defineComponent({
                         current: 5,
                         base: 5,
                     },
+                    unlocked: false,
                     numberBought: 0
                 },
                 {
@@ -180,6 +183,7 @@ export default defineComponent({
                         current: 10,
                         base: 10,
                     },
+                    unlocked: false,
                     numberBought: 0
                 }
             ],
@@ -195,6 +199,7 @@ export default defineComponent({
                         multiplier: 1.2,
                     },
                     bpc: 1,
+                    unlocked: false,
                     numberBought: 0
                 }
             ],
@@ -215,6 +220,7 @@ export default defineComponent({
                         slug: 'bananier',
                         multiplier: 1.3
                     },
+                    unlocked: false,
                     numberBought: 0
                 }
             ],
@@ -254,7 +260,7 @@ export default defineComponent({
                 this.totalBananas += this.bps / 20;
             }, 50)
         },
-        buyModule(module, type) {
+        buyModule(module, type, index) {
             if (this.bananas >= module.price.current) {
                 this.bananas -= module.price.current;
 
@@ -262,6 +268,16 @@ export default defineComponent({
 
                 if (type === 'bps') {
                     this.bps = this.calcBPS();
+
+                    if (index < this.bpsModules.length - 1) {
+                        this.bpsModules[index + 1].unlocked = true;
+                    }
+
+                    let buffToUnlock = this.bpsBuffsModules.find(buff => buff.moduleToModify.slug === module.slug);
+
+                    if (buffToUnlock !== undefined) {
+                        buffToUnlock.unlocked = true;
+                    }
                 } else if (type === 'bpc') {
                     this.bpc += module.bpc;
                 } else if (type === 'buff') {
@@ -339,7 +355,7 @@ export default defineComponent({
         },
         returnNiceNumber(number) {
             if (number < 1000000) {
-                return new Intl.NumberFormat('fr-FR').format(Math.round(number));
+                return new Intl.NumberFormat('fr-FR').format(Math.floor(number));
             } else if (number < 1000000000) {
                 return new Intl.NumberFormat('fr-FR', {
                     maximumFractionDigits: 3,
@@ -351,7 +367,7 @@ export default defineComponent({
                     minimumFractionDigits: 3
                 }).format(number / 1000000000) + 'B';
             }
-        },
+        }
     }
 })
 </script>

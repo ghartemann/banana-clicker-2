@@ -94,11 +94,11 @@ export default defineComponent({
     },
     methods: {
         priceForTenModules(price) {
-            return Math.round(price * (Math.pow(1.2, 10) - 1) / (1.2 - 1));
+            return Math.floor(price * (Math.pow(1.2, 10) - 1) / (1.2 - 1));
         },
         returnNiceNumber(number) {
             if (number < 1000000) {
-                return new Intl.NumberFormat('fr-FR').format(Math.round(number));
+                return new Intl.NumberFormat('fr-FR').format(Math.floor(number));
             } else {
                 return new Intl.NumberFormat('fr-FR', {
                     maximumFractionDigits: 3,
