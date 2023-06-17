@@ -1,8 +1,14 @@
 <template>
     <div class="tw-max-w-full tw-m-auto">
-        <h1 class="tw-text-6xl tw-text-center tw-py-10 tw-text-green-dark tw-font-medium">
-            Banana Clicker <span class="tw-text-yellow-dark tw-font-bold">2</span>
-        </h1>
+        <div class="tw-flex tw-justify-center tw-gap-5">
+            <h1 class="tw-text-6xl tw-text-center tw-py-10 tw-text-green-dark tw-font-medium">
+                Banana Clicker
+            </h1>
+
+            <h1 class="tw-text-6xl tw-text-center tw-py-10 tw-text-yellow-dark tw-font-bold animate__animated tw-animate-wiggle-more animate__infinite">
+                2
+            </h1>
+        </div>
 
         <div class="tw-grid tw-grid-cols-3 tw-gap-10">
             <div class="tw-col-span-1 tw-flex tw-flex-col tw-gap-5">

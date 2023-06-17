@@ -1,10 +1,16 @@
 <template>
     <div class="tw-max-w-full tw-m-auto tw-flex tw-flex-col tw-justify-center tw-items-center">
-        <h1 class="tw-text-6xl tw-text-center tw-py-10 tw-text-green-dark tw-font-medium">
-            Banana Clicker <span class="tw-text-yellow-dark tw-font-bold">2</span>
-        </h1>
+        <div class="tw-flex tw-justify-center tw-gap-5">
+            <h1 class="tw-text-6xl tw-text-center tw-py-10 tw-text-green-dark tw-font-medium">
+                Banana Clicker
+            </h1>
 
-        <div class="tw-w-1/2 tw-text-white tw-text-center tw-flex tw-flex-col tw-items-center tw-gap-5 tw-p-5 tw-rounded-2xl" id="test">
+            <h1 class="tw-text-6xl tw-text-center tw-py-10 tw-text-yellow-dark tw-font-bold animate__animated tw-animate-wiggle-more animate__infinite">
+                2
+            </h1>
+        </div>
+
+        <div class="tw-w-1/2 tw-text-white tw-text-center tw-flex tw-flex-col tw-items-center tw-gap-5 tw-p-5 tw-rounded-2xl animate__animated animate__bounceIn" id="test">
             <div class="">
                 Après vos déboires dans la jungle et la faillite de votre entreprise capitaliste de production bananière
                 porteuse de valeurs fortes telles que l'exploitation arboricole, minière, animale et humaine, vous
@@ -20,7 +26,7 @@
             <div>
                 Lancé·e que vous êtes dans la quête existencielle qu'est l'accumulation irréfléchie et infinie de richesse
                 et peu aidé·e des enseignements que vous auriez pu tirer de vos erreurs passées (vous n'avez visiblement
-                pas appris grand chose), vous décidez de vous lancer dans une nouvelle aventure, celle de la banane.
+                pas appris grand chose), vous décidez de vous lancer dans une nouvelle aventure : celle de la banane.
                 Encore.
             </div>
 
@@ -36,8 +42,8 @@
                 capital et de la banane ; votre prodigieuse odyssée ne fait que commencer...
             </div>
 
-            <v-btn class="tw-text-lg tw-bg-yellow-dark tw-rounded-full tw-text-green-darker tw-w-fit" :to="{name: 'clique'}">
-                Je veux des bananes
+            <v-btn class="tw-text-lg tw-bg-yellow-dark tw-rounded-full tw-text-green-darker tw-w-fit" :to="{name: 'loading'}">
+                Assez lu, je veux des bananes
             </v-btn>
         </div>
     </div>
