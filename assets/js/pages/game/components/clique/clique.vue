@@ -1,134 +1,112 @@
 <template>
-    <div class="tw-max-w-full tw-m-auto">
-        <div class="tw-flex tw-justify-center tw-gap-5">
-            <h1 class="tw-text-6xl tw-text-center tw-py-10 tw-text-green-dark tw-font-medium">
-                Banana Clicker
-            </h1>
+    <div class="tw-grid tw-grid-cols-3 tw-gap-10">
+        <div class="tw-col-span-1 tw-flex tw-flex-col tw-gap-5">
+            <h2 class="tw-text-4xl tw-text-white tw-font-bold">
+                Magasin
+            </h2>
 
-            <h1 class="tw-text-6xl tw-text-center tw-py-10 tw-text-yellow-dark tw-font-bold animate__animated tw-animate-wiggle-more animate__infinite">
-                2
-            </h1>
+            <div v-if="bpsModules[0].numberBought > 0 || bananas >= 30" class="tw-flex tw-flex-col tw-gap-4">
+                <template v-for="(bpsModule, index) in bpsModules" :key="index">
+                    <module-button
+                            v-if="bpsModule.unlocked === true"
+                            :bananas="bananas"
+                            :module="bpsModule"
+                            type="bps"
+                            @buy="(module, type) => buyModule(module, type, index)"
+                            @buy-multiple="(module, type, n) => buyNTimes(module, type, n)">
+                    </module-button>
+                </template>
+            </div>
+
+            <div v-else class="tw-text-2xl tw-text-white">Cliquez sur la banane.</div>
         </div>
 
-        <div class="tw-grid tw-grid-cols-3 tw-gap-10">
-            <div class="tw-col-span-1 tw-flex tw-flex-col tw-gap-5">
-                <h2 class="tw-text-4xl tw-text-white tw-font-bold">
-                    Magasin
-                </h2>
+        <div class="tw-col-span-1 tw-flex tw-flex-col tw-items-center tw-text-center animate-bounce delay-150 duration-300">
+            <button class="tw-bg-green-dark tw-rounded-full tw-w-fit tw-p-8 tw-shadow tw-m-5" @click="click">
+                <img src="../../../../../images/banane.png" alt="Banana" class="tw-w-36 tw-h-36 ">
+            </button>
 
-                <div v-if="bpsModules[0].numberBought > 0 || bananas >= 30" class="tw-flex tw-flex-col tw-gap-4">
-                    <template v-for="(bpsModule, index) in bpsModules" :key="index">
-                        <module-button
-                                v-if="bpsModule.unlocked === true"
-                                :bananas="bananas"
-                                :module="bpsModule"
-                                type="bps"
-                                @buy="(module, type) => buyModule(module, type, index)"
-                                @buy-multiple="(module, type, n) => buyNTimes(module, type, n)">
-                        </module-button>
-                    </template>
-                </div>
-
-                <div v-else class="tw-text-2xl tw-text-white">Cliquez sur la banane.</div>
-            </div>
-
-            <div class="tw-col-span-1 tw-flex tw-flex-col tw-items-center tw-text-center animate-bounce delay-150 duration-300">
-                <button class="tw-bg-green-dark tw-rounded-full tw-w-fit tw-p-8 tw-shadow tw-m-5" @click="click">
-                    <img src="../../../images/banane.png" alt="Banana" class="tw-w-36 tw-h-36 ">
-                </button>
-
-                <div class="tw-w-full tw-flex tw-flex-col tw-gap-5 tw-items-center">
-                    <div class="tw-text-white">
-                        <div class="tw-font-bold tw-text-6xl tw-text-white">
-                            {{ returnNiceNumber(bananas) }}
-                        </div>
-
-                        <v-tooltip right color="red" content-class='custom-tooltip'>
-                            <template v-slot:activator="{ props }">
-                                <div v-bind="props">
-                                    BPS : <span class="tw-font-bold">{{ returnNiceNumber(bps) }}</span>
-                                </div>
-                            </template>
-
-                            <span>Bananes Par Seconde</span>
-                        </v-tooltip>
-
-                        <v-tooltip right color="red" content-class='custom-tooltip'>
-                            <template v-slot:activator="{ props }">
-                                <div v-bind="props">
-                                    BPC : <span class="tw-font-bold">{{ returnNiceNumber(bpc) }}</span>
-                                </div>
-                            </template>
-
-                            <span>Bananes Par Clic</span>
-                        </v-tooltip>
-
-                        <div>
-                            Total : <span class="tw-font-bold">{{ returnNiceNumber(totalBananas) }}</span>
-                        </div>
-
-                        <div>
-                            Nombre de clics : <span class="tw-font-bold">{{ returnNiceNumber(nbClicks) }}</span>
-                        </div>
+            <div class="tw-w-full tw-flex tw-flex-col tw-gap-5 tw-items-center">
+                <div class="tw-text-white">
+                    <div class="tw-font-bold tw-text-6xl tw-text-white">
+                        {{ returnNiceNumber(bananas) }}
                     </div>
 
-                    <div class="tw-flex tw-flex-col tw-gap-1 tw-w-1/2">
-                        <div>DEBUG</div>
-                        <button @click="save" class="tw-bg-blue-100 tw-rounded-md">Save</button>
-                        <button @click="load" class="tw-bg-blue-100 tw-rounded-md">Load</button>
-                        <button @click="reset" class="tw-bg-red-100 tw-rounded-md">Reset</button>
-                        <button @click="cheat" class="tw-bg-green-100 tw-rounded-md">Cheat</button>
-                        <button @click="superCheat" class="tw-bg-green-100 tw-rounded-md">Super cheat</button>
+                    <v-tooltip right color="red" content-class='custom-tooltip'>
+                        <template v-slot:activator="{ props }">
+                            <div v-bind="props">
+                                BPS : <span class="tw-font-bold">{{ returnNiceNumber(bps) }}</span>
+                            </div>
+                        </template>
+
+                        <span>Bananes Par Seconde</span>
+                    </v-tooltip>
+
+                    <v-tooltip right color="red" content-class='custom-tooltip'>
+                        <template v-slot:activator="{ props }">
+                            <div v-bind="props">
+                                BPC : <span class="tw-font-bold">{{ returnNiceNumber(bpc) }}</span>
+                            </div>
+                        </template>
+
+                        <span>Bananes Par Clic</span>
+                    </v-tooltip>
+
+                    <div>
+                        Total : <span class="tw-font-bold">{{ returnNiceNumber(totalBananas) }}</span>
+                    </div>
+
+                    <div>
+                        Nombre de clics : <span class="tw-font-bold">{{ returnNiceNumber(nbClicks) }}</span>
                     </div>
                 </div>
-            </div>
 
-            <div class="tw-col-span-1 tw-flex tw-flex-col tw-gap-5">
-                <h2 class="tw-text-4xl tw-text-white tw-font-bold">
-                    Améliorations
-                </h2>
-
-                <div class="tw-flex tw-flex-col tw-gap-4">
-                    <template v-for="(bpcModule, index) in bpcModules" :key="index">
-                        <module-button
-                            :bananas="bananas"
-                            :module="bpcModule"
-                            type="bpc"
-                            @buy="(module, type) => buyModule(module, type)">
-                        </module-button>
-                    </template>
-
-                    <template v-for="(bpsBuffsModule, index) in bpsBuffsModules" :key="index">
-                        <module-button
-                            v-if="bpsBuffsModule.unlocked === true"
-                            :bananas="bananas"
-                            :module="bpsBuffsModule"
-                            type="buff"
-                            @buy="(module, type) => buyModule(module, type)">
-                        </module-button>
-                    </template>
+                <div class="tw-flex tw-flex-col tw-gap-1 tw-w-1/2">
+                    <div>DEBUG</div>
+                    <button @click="save" class="tw-bg-blue-100 tw-rounded-md">Save</button>
+                    <button @click="load" class="tw-bg-blue-100 tw-rounded-md">Load</button>
+                    <button @click="reset" class="tw-bg-red-100 tw-rounded-md">Reset</button>
+                    <button @click="cheat" class="tw-bg-green-100 tw-rounded-md">Cheat</button>
+                    <button @click="superCheat" class="tw-bg-green-100 tw-rounded-md">Super cheat</button>
                 </div>
             </div>
         </div>
 
-        <div>
-            <h2>Achievements</h2>
+        <div class="tw-col-span-1 tw-flex tw-flex-col tw-gap-5">
+            <h2 class="tw-text-4xl tw-text-white tw-font-bold">
+                Améliorations
+            </h2>
 
-            <div>
-                <div class="tw-border-2 tw-border-green-dark tw-rounded-lg tw-p-2 tw-w-12 tw-h-12">
-                    A
-                </div>
+            <div class="tw-flex tw-flex-col tw-gap-4">
+                <template v-for="(bpcModule, index) in bpcModules" :key="index">
+                    <module-button
+                        :bananas="bananas"
+                        :module="bpcModule"
+                        type="bpc"
+                        @buy="(module, type) => buyModule(module, type)">
+                    </module-button>
+                </template>
+
+                <template v-for="(bpsBuffsModule, index) in bpsBuffsModules" :key="index">
+                    <module-button
+                        v-if="bpsBuffsModule.unlocked === true"
+                        :bananas="bananas"
+                        :module="bpsBuffsModule"
+                        type="buff"
+                        @buy="(module, type) => buyModule(module, type)">
+                    </module-button>
+                </template>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import {defineComponent} from 'vue'
-import ModuleButton from "./components/module-button";
+import {defineComponent} from 'vue';
+import ModuleButton from "./components/module-button.vue";
 
 export default defineComponent({
-    name: "Home",
+    name: "clique",
     components: {ModuleButton},
     data() {
         return {
@@ -215,11 +193,11 @@ export default defineComponent({
                     description: 'Votre curseur mais en vraiment, vraiment mieux. Y\'a pas à dire, ça fait toute la différence.',
                     slug: '',
                     price: {
-                        current: 200,
-                        base: 200,
+                        current: 2000,
+                        base: 2000,
                         multiplier: 1.2,
                     },
-                    bpc: 1,
+                    bpc: 5,
                     unlocked: false,
                     numberBought: 0
                 }
@@ -384,35 +362,35 @@ export default defineComponent({
 
             switch (true) {
                 case number < 1000000:
-                    formattedNumber = new Intl.NumberFormat('fr-FR').format(number);
+                    formattedNumber = new Intl.NumberFormat('fr-FR').format(Math.floor(number));
 
                     break;
                 case number < 1000000000:
                     formattedNumber = new Intl.NumberFormat('fr-FR', {
                         maximumFractionDigits: 3,
                         minimumFractionDigits: 3
-                    }).format(number / 1000000) + 'M';
+                    }).format(Math.floor(number) / 1000000) + 'M';
 
                     break;
                 case number < 1000000000000:
                     formattedNumber = new Intl.NumberFormat('fr-FR', {
                         maximumFractionDigits: 3,
                         minimumFractionDigits: 3
-                    }).format(number / 1000000000) + 'B';
+                    }).format(Math.floor(number) / 1000000000) + 'B';
 
                     break;
                 case number < 1000000000000000:
                     formattedNumber = new Intl.NumberFormat('fr-FR', {
                         maximumFractionDigits: 3,
                         minimumFractionDigits: 3
-                    }).format(number / 1000000000000) + 'T';
+                    }).format(Math.floor(number) / 1000000000000) + 'T';
 
                     break;
                 case number < 1000000000000000000:
                     formattedNumber = new Intl.NumberFormat('fr-FR', {
                         maximumFractionDigits: 3,
                         minimumFractionDigits: 3
-                    }).format(number / 1000000000000000) + 'Q';
+                    }).format(Math.floor(number) / 1000000000000000) + 'Q';
 
                     break;
                 default:

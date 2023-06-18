@@ -79,7 +79,7 @@ export default defineComponent({
     watch: {
         progress() {
             if (this.progress === 100) {
-                this.$router.push({name: 'clique'});
+                this.$router.push({name: 'game'});
             }
         }
     }

@@ -1,7 +1,7 @@
 import * as VueRouter from "vue-router";
 
 import Home from "@pages/home";
-import Clique from "@pages/clique";
+import Game from "@pages/game";
 import Loading from "@pages/Loading";
 import NotFound from "@pages/Not-Found";
 
@@ -12,9 +12,9 @@ const routes = [
         component: Home,
     },
     {
-        path: "/clique",
-        name: "clique",
-        component: Clique,
+        path: "/game",
+        name: "game",
+        component: Game,
     },
     {
         path: "/loading",
