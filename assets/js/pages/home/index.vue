@@ -1,138 +1,66 @@
 <template>
-    <div class="tw-container">
-        <h1 class="tw-text-5xl tw-text-center tw-my-10">Banana Clicker 2</h1>
+    <div class="tw-max-w-full tw-m-auto tw-flex tw-flex-col tw-justify-center tw-items-center">
+        <div class="tw-flex tw-justify-center tw-gap-5">
+            <h1 class="tw-text-6xl tw-text-center tw-py-10 tw-text-green-dark tw-font-medium">
+                Banana Clicker
+            </h1>
 
-        <div class="tw-grid tw-grid-cols-3 tw-gap-10">
-            <div class="tw-col-span-1 tw-flex tw-flex-col tw-justify-center">
-                <div>BPS</div>
+            <h1 class="tw-text-6xl tw-text-center tw-py-10 tw-text-yellow-dark tw-font-bold animate__animated tw-animate-wiggle-more animate__infinite">
+                2
+            </h1>
+        </div>
 
-                <div class="tw-flex tw-flex-col tw-gap-4">
-                    <module-button v-for="bpsModule in bpsModules"
-                                   :bananas="bananas"
-                                   :module="bpsModule"
-                                   type="bps"
-                                   @buy="(module) => buyBpsModule(module)">
-                    </module-button>
-                </div>
+        <div class="tw-w-1/2 tw-text-white tw-text-center tw-flex tw-flex-col tw-items-center tw-gap-5 tw-p-5 tw-rounded-2xl animate__animated animate__bounceIn" id="test">
+            <div class="">
+                Après vos déboires dans la jungle et la faillite de votre entreprise capitaliste de production bananière
+                porteuse de valeurs fortes telles que l'exploitation arboricole, minière, animale et humaine, vous
+                décidez qu'après tout, zut, vous êtes loin d'avoir dit votre dernier mot. Ce qui demeure de votre
+                petit coeur se flétrit sous le fardeau immense de votre avidité, avidité dont les limites sont d'évidence
+                à peu près aussi matérielles que la morale au sein du système capitaliste ultralibéral que vous chérissez.
             </div>
 
-            <div class="tw-col-span-1 tw-flex tw-flex-col tw-items-center tw-text-center animate-bounce delay-150 duration-300">
-                <button class="tw-bg-green-dark tw-rounded-full tw-w-fit tw-p-8 tw-shadow tw-m-5" @click="getBanana">
-                    <img src="../../../images/banane.png" alt="Banana" class="tw-w-36 tw-h-36 ">
-                </button>
-
-                <div class="tw-font-bold tw-text-6xl">{{ Math.round(bananas) }}</div>
-
-                <div>
-                    <div>BPS : {{ bps }}</div>
-                    <div>BPC : {{ bpc }}</div>
-                </div>
+            <div>
+                Il vous faut du capital. Beaucoup, tout de suite et sans effort.
             </div>
 
-            <div class="tw-col-span-1 tw-flex tw-flex-col tw-justify-center tw-text-center">
-                <div>BPC</div>
-
-                <div class="tw-flex tw-flex-col tw-gap-4">
-                    <module-button v-for="bpcModule in bpcModules"
-                                   :bananas="bananas"
-                                   :module="bpcModule"
-                                   type="bpc"
-                                   @buy="(module) => buyBpcModule(module)">
-                    </module-button>
-                </div>
+            <div>
+                Lancé·e que vous êtes dans la quête existencielle qu'est l'accumulation irréfléchie et infinie de richesse
+                et peu aidé·e des enseignements que vous auriez pu tirer de vos erreurs passées (vous n'avez visiblement
+                pas appris grand chose), vous décidez de vous lancer dans une nouvelle aventure : celle de la banane.
+                Encore.
             </div>
+
+            <div class="">
+                Dans l'optique de le dire, ce dernier mot, vous faites l'acquisition d'une petite parcelle forestière en
+                Amazonie équatorienne pour une bouchée de pain auprès du gouvernement local, en faites expulser les
+                populations indigènes et entamez, lentement mais sûrement, votre capitalisation fruitière.
+            </div>
+
+            <div class="">
+                Telles sont les prémices de votre aventure dans Banana Clicker 2, un univers relativement inoffensif,
+                profondément inégalitaire et hautement rémunérateur. Soyez la ou le bienvenu·e au pays de la valeur, du
+                capital et de la banane ; votre prodigieuse odyssée ne fait que commencer...
+            </div>
+
+            <v-btn class="tw-text-lg tw-bg-yellow-dark tw-rounded-full tw-text-green-darker tw-w-fit" :to="{name: 'loading'}">
+                Assez lu, je veux des bananes
+            </v-btn>
         </div>
     </div>
 </template>
 
 <script>
 import {defineComponent} from 'vue'
-import ModuleButton from "./components/module-button.vue";
 
 export default defineComponent({
-    name: "Home",
-    components: {ModuleButton},
-    data() {
-        return {
-            bananas: 0,
-            bps: 0,
-            bpc: 1,
-            bpsModules: [
-                {
-                    name: 'Auto Clicker',
-                    article: 'un',
-                    description: 'Un curseur qui clique tout seul comme un grand. Si vous êtes un tant soit peu impressionnable ça vous fera peut-être quelque chose.',
-                    picture: 'autoclicker',
-                    price: 10,
-                    bps: 1,
-                    numberBought: 0
-                },
-                {
-                    name: 'Bananier',
-                    article: 'un',
-                    description: "Un bananier. Qui produit des bananes. Écoutez c'est un arbre, il n'y a pas non plus un million de choses à dire dessus. Si vous êtes plus impressionné.e par ça que par l'auto clicker je pense qu'il faudrait songer à arrêter de jouer dès maintenant.",
-                    picture: 'bananier',
-                    price: 500,
-                    bps: 5,
-                    numberBought: 0
-                },
-                {
-                    name: 'Macaque',
-                    article: 'un',
-                    description: 'Un macaque qui ramasse des bananes. On le paie une misère et il ne semble pas s\'en plaindre mais niveau efficacité on repassera.',
-                    picture: 'macaque',
-                    price: 1000,
-                    bps: 10,
-                    numberBought: 0
-                }
-            ],
-            bpcModules: [
-                {
-                    name: 'Meilleur curseur',
-                    article: 'un',
-                    description: '',
-                    picture: '',
-                    price: 200,
-                    bpc: 1,
-                    numberBought: 0
-                }
-            ]
-        }
-    },
-    created() {
-        this.startBPS();
-    },
-    methods: {
-        getBanana() {
-            this.bananas += this.bpc;
-        },
-        buyBpsModule(module) {
-            if (this.bananas >= module.price) {
-                this.bananas -= module.price;
-                this.bps += module.bps;
-
-                module.price = Math.round(module.price * 1.3);
-                module.numberBought++;
-            }
-        },
-        buyBpcModule(module) {
-            if (this.bananas >= module.price) {
-                this.bananas -= module.price;
-                this.bpc += module.bpc;
-
-                module.price = Math.round(module.price * 1.3);
-                module.numberBought++;
-            }
-        },
-        startBPS() {
-            setInterval(() => {
-                this.bananas += this.bps / 20;
-            }, 50)
-        }
-    }
+    name: "index"
 })
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+#test {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
 </style>
