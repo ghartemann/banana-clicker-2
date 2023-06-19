@@ -33,7 +33,7 @@
             <div class="">
                 Dans l'optique de le dire, ce dernier mot, vous faites l'acquisition d'une petite parcelle forestière en
                 Amazonie équatorienne pour une bouchée de pain auprès du gouvernement local, en faites expulser les
-                populations indigènes et entamez, lentement mais sûrement, votre capitalisation fruitière.
+                populations autochtones et entamez, lentement mais sûrement, votre capitalisation fruitière.
             </div>
 
             <div class="">
@@ -42,18 +42,47 @@
                 capital et de la banane ; votre prodigieuse odyssée ne fait que commencer...
             </div>
 
-            <v-btn class="tw-text-lg tw-bg-yellow-dark tw-rounded-full tw-text-green-darker tw-w-fit" :to="{name: 'loading'}">
-                Assez lu, je veux des bananes
-            </v-btn>
+<!--            <v-btn class="tw-text-lg tw-bg-yellow-dark tw-rounded-full tw-text-green-darker tw-w-fit" :to="{name: 'loading'}">-->
+<!--                Assez lu, je veux des bananes-->
+<!--            </v-btn>-->
+
+            <div>{{timerValue}}</div>
         </div>
     </div>
 </template>
 
 <script>
-import {defineComponent} from 'vue'
+import {defineComponent} from 'vue';
+import moment from "moment";
 
 export default defineComponent({
-    name: "index"
+    name: "index",
+    data: () => ({
+        timerValue: 'Calcul du temps restant...',
+        timerInterval: null,
+    }),
+    created() {
+        this.startCountDown();
+    },
+    methods: {
+        startCountDown() {
+            clearInterval(this.timerInterval);
+
+            let endAt = moment('2023-06-08 09:30:26');
+
+            this.timerInterval = setInterval(() => {
+                let timeLeft = moment.duration(endAt.diff(moment()));
+
+                if (timeLeft.asSeconds() < 0) {
+                    this.timerValue = "0:00:00";
+
+                    return;
+                }
+
+                this.timerValue = moment(timeLeft.asDays() + ' jours,' + moment(timeLeft.asMilliseconds()).format('hh:mm:ss'));
+            }, 500);
+        },
+    }
 })
 </script>
 

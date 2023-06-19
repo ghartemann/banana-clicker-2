@@ -12,12 +12,12 @@ const routes = [
         component: Home,
     },
     {
-        path: "/game",
+        path: "/azertyuiop-game-123456789",
         name: "game",
         component: Game,
     },
     {
-        path: "/loading",
+        path: "/azertyuiop-loading-123456789",
         name: "loading",
         component: Loading,
     },
