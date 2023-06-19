@@ -6,11 +6,11 @@
                 rail
                 class="tw-z-50 !tw-bg-[#0e1c17]"
             >
-                <v-list>
+                <v-list class="!tw-text-white">
                     <v-list-item
-                        prepend-avatar="/images/banana.png"
-                        title="Sandra Adams"
-                        subtitle="sandra_a88@gmailcom"
+                        prepend-avatar="/assets/images/banane.png"
+                        title="Banana Clicker"
+                        subtitle="Le jeu des bananes"
                     ></v-list-item>
                 </v-list>
 

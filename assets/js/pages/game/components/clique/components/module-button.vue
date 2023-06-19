@@ -31,7 +31,7 @@
                         </div>
 
                         <div class="tw-flex tw-gap-2 tw-items-center tw-text-lg">
-                            <img src="../../../../../../images/banane.png" alt="Banana" class="tw-w-4 tw-h-4">
+                            <img src="/assets/images/banane.png" alt="Banana" class="tw-w-4 tw-h-4">
                             {{ returnNiceNumber(module.price.current) }}
                         </div>
 
@@ -49,16 +49,14 @@
                     <div>x 10</div>
 
                     <div class="tw-flex tw-gap-2 tw-items-center">
-                        <img src="@images/banane.png" alt="Banana" class="tw-w-4 tw-h-4">
+                        <img src="/assets/images/banane.png" alt="Banana" class="tw-w-4 tw-h-4">
                         {{ returnNiceNumber(priceForTenModules(module.price.current)) }}
                     </div>
                 </button>
             </div>
         </template>
 
-        <div class="tw-text-green-darker">
-            <div class="tw-font-bold">{{ module.name }}</div>
-
+        <div class="tw-text-green-darker tw-flex tw-flex-col tw-gap-2">
             <div>{{ module.description }}</div>
 
             <div v-if="type === 'bps'">Chaque {{ module.name }} produit {{ module.bps.current }} bananes par seconde.</div>

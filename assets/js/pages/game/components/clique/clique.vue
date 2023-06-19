@@ -23,7 +23,7 @@
 
         <div class="tw-col-span-1 tw-flex tw-flex-col tw-items-center tw-text-center animate-bounce delay-150 duration-300">
             <button class="tw-bg-green-dark tw-rounded-full tw-w-fit tw-p-8 tw-shadow tw-m-5" @click="click">
-                <img src="@images/banane.png" alt="Banana" class="tw-w-36 tw-h-36 ">
+                <img src="/assets/images/banane.png" alt="Banana" class="tw-w-36 tw-h-36 ">
             </button>
 
             <div class="tw-w-full tw-flex tw-flex-col tw-gap-5 tw-items-center">
@@ -159,8 +159,9 @@ export default defineComponent({
                 {
                     name: 'Macaque',
                     article: 'un',
-                    description: 'Un macaque qui ramasse des bananes. Vous le payez une misère et il ne semble pas s\'en ' +
-                        'plaindre mais niveau efficacité on repassera.',
+                    description: 'Un macaque qui ramasse des bananes. Vous le payez la moitié du SMIC local et il vit très ' +
+                        'en-dessous du seuil de pauvreté mais il ne semble pas s\'en plaindre. Niveau efficacité c\'est ' +
+                        'pas exactement ça mais bon, vu le prix...',
                     slug: 'macaque',
                     price: {
                         current: 1000,
@@ -335,13 +336,13 @@ export default defineComponent({
                 achievements: this.achievements
             };
 
-            localStorage.setItem('saveFile', btoa(JSON.stringify(saveFile)));
+            localStorage.setItem('saveFile', btoa(btoa(JSON.stringify(saveFile))));
         },
         load() {
             let saveFile = localStorage.getItem('saveFile');
 
             if (saveFile !== null) {
-                saveFile = JSON.parse(atob(saveFile));
+                saveFile = JSON.parse(atob(atob(saveFile)));
 
                 this.bananas = saveFile.bananas;
                 this.totalBananas = saveFile.totalBananas;
