@@ -14,19 +14,6 @@ Encore
     // only needed for CDN's or subdirectory deploy
     //.setManifestKeyPrefix('build/')
 
-    .copyFiles({
-        from: './assets/images',
-
-        // optional target path, relative to the output dir
-        // to: 'images/[path][name].[ext]',
-
-        // if versioning is enabled, add the file hash too
-        to: 'images/[path][name].[ext]',
-
-        // only copy files matching this pattern
-        // pattern: /\.(png|jpg|jpeg)$/
-    })
-
     /*
      * ENTRY CONFIG
      *
@@ -69,15 +56,11 @@ Encore
         config.corejs = '3.23';
     })
 
-    // enables Sass/SCSS support
-    .enableSassLoader()
-    .enablePostCssLoader()
-
-    // uncomment if you use TypeScript
-    .enableTypeScriptLoader()
-
     // enables Vue.js 3
     .enableVueLoader(() => {}, { runtimeCompilerBuild: false })
+
+    // enables Sass/SCSS support
+    .enableSassLoader()
 
     .addAliases({
         "@images": `${__dirname}/assets/images`,
@@ -85,15 +68,14 @@ Encore
         "@pages": `${__dirname}/assets/js/pages`,
     })
 
-    // uncomment if you use React
-    //.enableReactPreset()
+    .enablePostCssLoader()
+
+    // uncomment if you use TypeScript
+    // .enableTypeScriptLoader()
 
     // uncomment to get integrity="..." attributes on your script & link tags
     // requires WebpackEncoreBundle 1.4 or higher
     //.enableIntegrityHashes(Encore.isProduction())
-
-    // uncomment if you're having problems with a jQuery plugin
-    //.autoProvidejQuery()
 ;
 
 module.exports = Encore.getWebpackConfig();

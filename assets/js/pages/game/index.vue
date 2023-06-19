@@ -33,9 +33,15 @@ export default defineComponent({
             required: true,
         },
     },
+    created() {
+        console.log('ATTENTON: il est strictement INTERDIT d\'utiliser la console pour tricher. Si vous le faites, ' +
+            'sachez que je serai très triste et déçu par votre comportement et qu\'il me faudra sûrement plusieurs ' +
+            'années de thérapie supplémentaires pour tenter de passer outre le profond sentiment de trahison dont vous ' +
+            'serez au moins partiellement sinon totalement responsable.');
+    }
+
 })
 </script>
-
 <style scoped>
 
 </style>

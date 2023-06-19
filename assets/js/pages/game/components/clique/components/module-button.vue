@@ -8,7 +8,9 @@
                         :class="type === 'bps' ? 'tw-bg-green-dark tw-col-span-9' : 'tw-bg-yellow-dark tw-col-span-12'"
                 >
                     <div class="tw-w-1/5">
-                        <img src="../../../../../../images/bps/autoclicker.png" :alt="module.slug" class="tw-w-14 tw-h-14 tw-mr-5">
+                        <img :src="'/assets/images/modules/' + type + '/' + module.slug + '.png'"
+                             :alt="module.slug"
+                             class="tw-w-14 tw-h-14 tw-mr-5">
                     </div>
 
                     <div class="tw-w-4/5 tw-flex tw-flex-col tw-items-start tw-text-start tw-text-white">
@@ -47,7 +49,7 @@
                     <div>x 10</div>
 
                     <div class="tw-flex tw-gap-2 tw-items-center">
-                        <img src="../../../../../../images/banane.png" alt="Banana" class="tw-w-4 tw-h-4">
+                        <img src="@images/banane.png" alt="Banana" class="tw-w-4 tw-h-4">
                         {{ returnNiceNumber(priceForTenModules(module.price.current)) }}
                     </div>
                 </button>
@@ -58,6 +60,8 @@
             <div class="tw-font-bold">{{ module.name }}</div>
 
             <div>{{ module.description }}</div>
+
+            <div v-if="type === 'bps'">Chaque {{ module.name }} produit {{ module.bps.current }} bananes par seconde.</div>
 
             <div>
                 <div>

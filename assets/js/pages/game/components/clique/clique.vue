@@ -13,7 +13,7 @@
                             :module="bpsModule"
                             type="bps"
                             @buy="(module, type) => buyModule(module, type, index)"
-                            @buy-multiple="(module, type, n) => buyNTimes(module, type, n)">
+                            @buy-multiple="(module, type, n) => buyNTimes(module, type, n, index)">
                     </module-button>
                 </template>
             </div>
@@ -23,7 +23,7 @@
 
         <div class="tw-col-span-1 tw-flex tw-flex-col tw-items-center tw-text-center animate-bounce delay-150 duration-300">
             <button class="tw-bg-green-dark tw-rounded-full tw-w-fit tw-p-8 tw-shadow tw-m-5" @click="click">
-                <img src="../../../../../images/banane.png" alt="Banana" class="tw-w-36 tw-h-36 ">
+                <img src="@images/banane.png" alt="Banana" class="tw-w-36 tw-h-36 ">
             </button>
 
             <div class="tw-w-full tw-flex tw-flex-col tw-gap-5 tw-items-center">
@@ -77,9 +77,10 @@
                 Améliorations
             </h2>
 
-            <div class="tw-flex tw-flex-col tw-gap-4">
+            <div v-if="bpcModules[0].unlocked === true || bpsBuffsModules[0].unlocked === true" class="tw-flex tw-flex-col tw-gap-4">
                 <template v-for="(bpcModule, index) in bpcModules" :key="index">
                     <module-button
+                        v-if="bpcModule.unlocked === true"
                         :bananas="bananas"
                         :module="bpcModule"
                         type="bpc"
@@ -97,6 +98,8 @@
                     </module-button>
                 </template>
             </div>
+
+            <div v-else class="tw-text-2xl tw-text-white">Rien à améliorer pour l'instant.</div>
         </div>
     </div>
 </template>
@@ -139,7 +142,7 @@ export default defineComponent({
                     article: 'un',
                     description: "Un bananier. Qui produit des bananes. Écoutez c'est un arbre, il n'y a pas non plus un " +
                         "million de choses à dire dessus. Si vous êtes plus impressionné.e par ça que par l'auto clicker, " +
-                        "il faudrait peut-être songer à arrêter de jouer dès maintenant.",
+                        "il faudrait peut-être songer à mettre fin à votre aventure dès maintenant.",
                     slug: 'bananier',
                     price: {
                         current: 500,
@@ -156,7 +159,7 @@ export default defineComponent({
                 {
                     name: 'Macaque',
                     article: 'un',
-                    description: 'Un macaque qui ramasse des bananes. On le paie une misère et il ne semble pas s\'en ' +
+                    description: 'Un macaque qui ramasse des bananes. Vous le payez une misère et il ne semble pas s\'en ' +
                         'plaindre mais niveau efficacité on repassera.',
                     slug: 'macaque',
                     price: {
@@ -170,6 +173,24 @@ export default defineComponent({
                     },
                     unlocked: false,
                     numberBought: 0
+                },
+                {
+                    name: 'Gorille',
+                    article: 'un',
+                    description: 'Un gorille qui fait à peu près la même chose que le macaque, mais de façon ' +
+                        'remarquablement plus efficiente et pour une paie remarquablement peu supérieure à celle de son compère.',
+                    slug: 'gorille',
+                    price: {
+                        current: 11000,
+                        base: 11000,
+                        multiplier: 1.2,
+                    },
+                    bps: {
+                        current: 40,
+                        base: 40,
+                    },
+                    unlocked: false,
+                    numberBought: 0
                 }
             ],
             bpcModules: [
@@ -177,7 +198,7 @@ export default defineComponent({
                     name: 'Meilleur curseur',
                     article: 'un',
                     description: 'Votre curseur mais en mieux. Il clique plus efficacement, sans aucune explication.',
-                    slug: '',
+                    slug: 'meilleur-curseur',
                     price: {
                         current: 200,
                         base: 200,
@@ -191,7 +212,7 @@ export default defineComponent({
                     name: 'Curseur encore plus fort',
                     article: 'un',
                     description: 'Votre curseur mais en vraiment, vraiment mieux. Y\'a pas à dire, ça fait toute la différence.',
-                    slug: '',
+                    slug: 'curseur-encore-plus-fort',
                     price: {
                         current: 2000,
                         base: 2000,
@@ -273,10 +294,12 @@ export default defineComponent({
                         this.bpsModules[index + 1].unlocked = true;
                     }
 
-                    let buffToUnlock = this.bpsBuffsModules.find(buff => buff.moduleToModify.slug === module.slug);
+                    if (module.numberBought >= 10) {
+                        let buffToUnlock = this.bpsBuffsModules.find(buff => buff.moduleToModify.slug === module.slug);
 
-                    if (buffToUnlock !== undefined) {
-                        buffToUnlock.unlocked = true;
+                        if (buffToUnlock !== undefined) {
+                            buffToUnlock.unlocked = true;
+                        }
                     }
                 } else if (type === 'bpc') {
                     this.bpc += module.bpc;
@@ -290,9 +313,9 @@ export default defineComponent({
                 module.price.current = module.price.current * module.price.multiplier;
             }
         },
-        buyNTimes(module, type, n) {
+        buyNTimes(module, type, n, index) {
             for (let i = 0; i < n; i++) {
-                this.buyModule(module, type);
+                this.buyModule(module, type, index);
             }
         },
         startAutomaticSaving() {
