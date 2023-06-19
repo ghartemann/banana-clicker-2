@@ -2,8 +2,10 @@
     <v-tooltip right color="red" content-class='custom-tooltip'>
         <template v-slot:activator="{ props }">
             <div v-bind="props" class="tw-grid tw-grid-cols-12 tw-gap-4">
-                <button @click="$emit('buy', module, type)"
+                <button :ref="'button' + type + module.slug"
+                        @click="clickButton(module)"
                         :disabled="bananas < module.price.current || module.numberBought >= module.max"
+                        style="--animate-duration:0.1s;"
                         class="tw-flex tw-w-full tw-text-xl tw-rounded-2xl tw-relative tw-p-3 tw-cursor-pointer tw-shadow-lg disabled:tw-bg-opacity-50 hover:tw-brightness-110 disabled:tw-cursor-not-allowed"
                         :class="type === 'bps' ? 'tw-bg-green-dark tw-col-span-9' : 'tw-bg-yellow-dark tw-col-span-12'"
                 >
@@ -76,6 +78,7 @@
 
 <script>
 import {defineComponent} from 'vue'
+import {useAnimateCss} from "../../../../../composables/animateCssComposable";
 
 export default defineComponent({
     name: "module-button",
@@ -95,6 +98,11 @@ export default defineComponent({
         }
     },
     methods: {
+        useAnimateCss,
+        clickButton(module) {
+            this.$emit('buy', module, this.type);
+            this.useAnimateCss(this.$refs['button' + this.type + module.slug], 'pulse')
+        },
         priceForTenModules(price) {
             return Math.floor(price * (Math.pow(1.2, 10) - 1) / (1.2 - 1));
         },

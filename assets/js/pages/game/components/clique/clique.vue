@@ -22,8 +22,12 @@
         </div>
 
         <div class="tw-col-span-1 tw-flex tw-flex-col tw-items-center tw-text-center animate-bounce delay-150 duration-300">
-            <button class="tw-bg-green-dark tw-rounded-full tw-w-fit tw-p-8 tw-shadow tw-m-5" @click="click">
-                <img src="/assets/images/banane.png" alt="Banana" class="tw-w-36 tw-h-36 ">
+            <button class="tw-bg-green-dark tw-rounded-full tw-w-fit tw-p-8 tw-shadow tw-m-5">
+                <img ref="banane"
+                     src="/assets/images/banane.png" alt="Banana"
+                     class="tw-w-36 tw-h-36 animate__faster"
+                     style="--animate-duration: 0.2s;"
+                     @click="clickBanana">
             </button>
 
             <div class="tw-w-full tw-flex tw-flex-col tw-gap-5 tw-items-center">
@@ -35,7 +39,10 @@
                     <v-tooltip right color="red" content-class='custom-tooltip'>
                         <template v-slot:activator="{ props }">
                             <div v-bind="props">
-                                BPS : <span class="tw-font-bold">{{ returnNiceNumber(bps) }}</span>
+                                BPS :
+                                <span class="tw-font-bold">
+                                    {{ returnNiceNumber(bps) }}
+                                </span>
                             </div>
                         </template>
 
@@ -45,7 +52,10 @@
                     <v-tooltip right color="red" content-class='custom-tooltip'>
                         <template v-slot:activator="{ props }">
                             <div v-bind="props">
-                                BPC : <span class="tw-font-bold">{{ returnNiceNumber(bpc) }}</span>
+                                BPC :
+                                <span class="tw-font-bold">
+                                    {{ returnNiceNumber(bpc) }}
+                                </span>
                             </div>
                         </template>
 
@@ -53,11 +63,17 @@
                     </v-tooltip>
 
                     <div>
-                        Total : <span class="tw-font-bold">{{ returnNiceNumber(totalBananas) }}</span>
+                        Total :
+                        <span class="tw-font-bold">
+                            {{ returnNiceNumber(totalBananas) }}
+                        </span>
                     </div>
 
                     <div>
-                        Nombre de clics : <span class="tw-font-bold">{{ returnNiceNumber(nbClicks) }}</span>
+                        Nombre de clics :
+                        <span class="tw-font-bold">
+                            {{ returnNiceNumber(nbClicks) }}
+                        </span>
                     </div>
                 </div>
 
@@ -106,7 +122,8 @@
 
 <script>
 import {defineComponent} from 'vue';
-import ModuleButton from "./components/module-button.vue";
+import ModuleButton from "./components/module-button";
+import {useAnimateCss} from "../../../../composables/animateCssComposable";
 
 export default defineComponent({
     name: "clique",
@@ -251,7 +268,12 @@ export default defineComponent({
                     name: 'Première banane',
                     condition: 1,
                     unlocked: false
-                }
+                },
+                {
+                    name: 'Le million',
+                    condition: 1000000,
+                    unlocked: false
+                },
             ]
         }
     },
@@ -262,7 +284,13 @@ export default defineComponent({
         this.startAutomaticSaving();
     },
     methods: {
-        click() {
+        useAnimateCss,
+        clickBanana() {
+            this.addBanana();
+
+            this.useAnimateCss(this.$refs.banane, 'jello');
+        },
+        addBanana() {
             this.bananas += this.bpc;
             this.totalBananas += this.bpc;
             this.nbClicks++;
@@ -278,9 +306,11 @@ export default defineComponent({
         },
         startBPS() {
             setInterval(() => {
-                this.bananas += this.bps / 20;
-                this.totalBananas += this.bps / 20;
-            }, 50)
+                this.bananas += this.bps / 10;
+                this.totalBananas += this.bps / 10;
+
+                this.unlockAchievements();
+            }, 100)
         },
         buyModule(module, type, index) {
             if (this.bananas >= module.price.current) {
@@ -319,6 +349,13 @@ export default defineComponent({
                 this.buyModule(module, type, index);
             }
         },
+        unlockAchievements() {
+            this.achievements.forEach(achievement => {
+                if (this.totalBananas >= achievement.condition) {
+                    achievement.unlocked = true;
+                }
+            });
+        },
         startAutomaticSaving() {
             setInterval(() => {
                 this.save();
@@ -332,8 +369,7 @@ export default defineComponent({
                 bpc: this.bpc,
                 nbClicks: this.nbClicks,
                 bpsModules: this.bpsModules,
-                bpcModules: this.bpcModules,
-                achievements: this.achievements
+                bpcModules: this.bpcModules
             };
 
             localStorage.setItem('saveFile', btoa(btoa(JSON.stringify(saveFile))));
@@ -351,7 +387,6 @@ export default defineComponent({
                 this.nbClicks = saveFile.nbClicks;
                 this.bpsModules = saveFile.bpsModules;
                 this.bpcModules = saveFile.bpcModules;
-                this.achievements = saveFile.achievements;
             }
         },
         reset() {
@@ -424,6 +459,13 @@ export default defineComponent({
             }
 
             return formattedNumber;
+        }
+    },
+    watch: {
+        achievements: {
+            handler() {
+                this.$emit('achievements-updated', this.achievements);
+            }, deep: true //connard
         }
     }
 })

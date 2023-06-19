@@ -1,12 +1,22 @@
 <template>
-    <div class="tw-text-white tw-text-8xl">En construction</div>
+    <div>
+        <div v-for="achievement in achievements" class="tw-text-white">
+            {{ achievement.name }} {{ achievement.unlocked }}
+        </div>
+    </div>
 </template>
 
 <script>
-import {defineComponent} from 'vue'
+import {defineComponent} from 'vue';
 
 export default defineComponent({
-    name: "achievements"
+    name: "achievements",
+    props: {
+        achievements: {
+            type: Array,
+            required: true
+        }
+    }
 })
 </script>
 

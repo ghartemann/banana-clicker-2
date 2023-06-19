@@ -9,7 +9,7 @@
                 <v-list class="!tw-text-white">
                     <v-list-item
                         prepend-avatar="/assets/images/banane.png"
-                        title="Banana Clicker"
+                        title="Banana Clicker 2"
                         subtitle="Le jeu des bananes"
                     ></v-list-item>
                 </v-list>
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import {defineComponent} from 'vue'
+import {defineComponent} from 'vue';
 
 export default defineComponent({
     name: "app-bar",
