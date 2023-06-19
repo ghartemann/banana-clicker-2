@@ -1,10 +1,10 @@
 <template>
-    <v-tooltip right color="red" content-class='custom-tooltip'>
+    <v-tooltip right content-class='custom-tooltip'>
         <template v-slot:activator="{ props }">
             <div v-bind="props" class="tw-grid tw-grid-cols-12 tw-gap-4">
-                <button :ref="'button' + type + module.slug"
-                        @click="clickButton(module)"
-                        :disabled="bananas < module.price.current || module.numberBought >= module.max"
+                <button :ref="'button' + type + module.slug + 1"
+                        @click="clickButton(1)"
+                        :disabled="bananas < priceForOneModule || module.numberBought >= module.max"
                         style="--animate-duration:0.1s;"
                         class="tw-flex tw-w-full tw-text-xl tw-rounded-2xl tw-relative tw-p-3 tw-cursor-pointer tw-shadow-lg disabled:tw-bg-opacity-50 hover:tw-brightness-110 disabled:tw-cursor-not-allowed"
                         :class="type === 'bps' ? 'tw-bg-green-dark tw-col-span-9' : 'tw-bg-yellow-dark tw-col-span-12'"
@@ -21,11 +21,11 @@
                         </div>
 
                         <div v-if="type === 'bps'" class="tw-text-lg">
-                            +{{ returnNiceNumber(module.bps.current) }} BPS
+                            +{{ useReturnNicerNumber(module.bps.current) }} BPS
                         </div>
 
                         <div v-else-if="type === 'bpc'" class="tw-text-lg">
-                            +{{ returnNiceNumber(module.bpc) }} BPC
+                            +{{ useReturnNicerNumber(module.bpc) }} BPC
                         </div>
 
                         <div v-else-if="type === 'buff'" class="tw-text-lg">
@@ -34,7 +34,7 @@
 
                         <div class="tw-flex tw-gap-2 tw-items-center tw-text-lg">
                             <img src="/assets/images/banane.png" alt="Banana" class="tw-w-4 tw-h-4">
-                            {{ returnNiceNumber(module.price.current) }}
+                            {{ useReturnNicerNumber(priceForOneModule) }}
                         </div>
 
                         <div class="tw-absolute tw-right-2 tw-bottom-1 tw-opacity-50">
@@ -43,16 +43,18 @@
                     </div>
                 </button>
 
-                <button @click="$emit('buy-multiple', module, type, 10)"
+                <button :ref="'button' + type + module.slug + 10"
+                        @click="clickButton(10)"
                         v-if="type === 'bps'"
-                        :disabled="bananas < priceForTenModules(module.price.current)"
+                        :disabled="bananas < priceForTenModules"
+                        style="--animate-duration:0.1s;"
                         class="tw-col-span-3 tw-rounded-2xl tw-p-3 tw-cursor-pointer tw-shadow-lg tw-bg-green-dark disabled:tw-bg-opacity-50 hover:tw-brightness-110 disabled:tw-cursor-not-allowed tw-text-white"
                 >
                     <div>x 10</div>
 
                     <div class="tw-flex tw-gap-2 tw-items-center">
                         <img src="/assets/images/banane.png" alt="Banana" class="tw-w-4 tw-h-4">
-                        {{ returnNiceNumber(priceForTenModules(module.price.current)) }}
+                        {{ useReturnNicerNumber(priceForTenModules) }}
                     </div>
                 </button>
             </div>
@@ -61,7 +63,7 @@
         <div class="tw-text-green-darker tw-flex tw-flex-col tw-gap-2">
             <div>{{ module.description }}</div>
 
-            <div v-if="type === 'bps'">Chaque {{ module.name }} produit {{ module.bps.current }} bananes par seconde.</div>
+            <div v-if="type === 'bps'">Chaque {{ module.name }} produit {{ useReturnNicerNumber(module.bps.current) }} bananes par seconde.</div>
 
             <div>
                 <div>
@@ -79,6 +81,7 @@
 <script>
 import {defineComponent} from 'vue'
 import {useAnimateCss} from "../../../../../composables/animateCssComposable";
+import {useReturnNicerNumber} from "../../../../../composables/numbersComposable";
 
 export default defineComponent({
     name: "module-button",
@@ -97,24 +100,24 @@ export default defineComponent({
             required: true
         }
     },
+    computed: {
+        priceForOneModule() {
+            if (this.module.numberBought === 0) {
+                return this.module.price.base;
+            } else {
+                return Math.floor(this.module.price.base * (Math.pow(this.module.price.multiplier, this.module.numberBought + 1) - 1) / (this.module.price.multiplier - 1));
+            }
+        },
+        priceForTenModules() {
+            return Math.floor(this.priceForOneModule * (Math.pow(this.module.price.multiplier, 10) - 1) / (this.module.price.multiplier - 1));
+        },
+    },
     methods: {
         useAnimateCss,
-        clickButton(module) {
-            this.$emit('buy', module, this.type);
-            this.useAnimateCss(this.$refs['button' + this.type + module.slug], 'pulse')
-        },
-        priceForTenModules(price) {
-            return Math.floor(price * (Math.pow(1.2, 10) - 1) / (1.2 - 1));
-        },
-        returnNiceNumber(number) {
-            if (number < 1000000) {
-                return new Intl.NumberFormat('fr-FR').format(Math.floor(number));
-            } else {
-                return new Intl.NumberFormat('fr-FR', {
-                    maximumFractionDigits: 3,
-                    minimumFractionDigits: 3
-                }).format(number / 1000000) + 'M';
-            }
+        useReturnNicerNumber,
+        clickButton(n) {
+            this.$emit('buy-n-times', this.module, this.type, n);
+            this.useAnimateCss(this.$refs['button' + this.type + this.module.slug + n], 'pulse');
         },
         returnPercentage(number) {
             return number * 100 - 100;

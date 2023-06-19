@@ -12,8 +12,7 @@
                             :bananas="bananas"
                             :module="bpsModule"
                             type="bps"
-                            @buy="(module, type) => buyModule(module, type, index)"
-                            @buy-multiple="(module, type, n) => buyNTimes(module, type, n, index)">
+                            @buy-n-times="(module, type, n) => buyNTimes(module, type, n, index)">
                     </module-button>
                 </template>
             </div>
@@ -33,15 +32,15 @@
             <div class="tw-w-full tw-flex tw-flex-col tw-gap-5 tw-items-center">
                 <div class="tw-text-white">
                     <div class="tw-font-bold tw-text-6xl tw-text-white">
-                        {{ returnNiceNumber(bananas) }}
+                        {{ useReturnNicerNumber(bananas) }}
                     </div>
 
-                    <v-tooltip right color="red" content-class='custom-tooltip'>
+                    <v-tooltip right content-class='custom-tooltip'>
                         <template v-slot:activator="{ props }">
                             <div v-bind="props">
                                 BPS :
                                 <span class="tw-font-bold">
-                                    {{ returnNiceNumber(bps) }}
+                                    {{ useReturnNicerNumber(bps) }}
                                 </span>
                             </div>
                         </template>
@@ -49,12 +48,12 @@
                         <span>Bananes Par Seconde</span>
                     </v-tooltip>
 
-                    <v-tooltip right color="red" content-class='custom-tooltip'>
+                    <v-tooltip right content-class='custom-tooltip'>
                         <template v-slot:activator="{ props }">
                             <div v-bind="props">
                                 BPC :
                                 <span class="tw-font-bold">
-                                    {{ returnNiceNumber(bpc) }}
+                                    {{ useReturnNicerNumber(bpc) }}
                                 </span>
                             </div>
                         </template>
@@ -65,14 +64,14 @@
                     <div>
                         Total :
                         <span class="tw-font-bold">
-                            {{ returnNiceNumber(totalBananas) }}
+                            {{ useReturnNicerNumber(totalBananas) }}
                         </span>
                     </div>
 
                     <div>
                         Nombre de clics :
                         <span class="tw-font-bold">
-                            {{ returnNiceNumber(nbClicks) }}
+                            {{ useReturnNicerNumber(nbClicks) }}
                         </span>
                     </div>
                 </div>
@@ -82,8 +81,8 @@
                     <button @click="save" class="tw-bg-blue-100 tw-rounded-md">Save</button>
                     <button @click="load" class="tw-bg-blue-100 tw-rounded-md">Load</button>
                     <button @click="reset" class="tw-bg-red-100 tw-rounded-md">Reset</button>
-                    <button @click="cheat" class="tw-bg-green-100 tw-rounded-md">Cheat</button>
-                    <button @click="superCheat" class="tw-bg-green-100 tw-rounded-md">Super cheat</button>
+                    <button @click="cheat(1000000)" class="tw-bg-green-100 tw-rounded-md">Cheat</button>
+                    <button @click="cheat(1000000000)" class="tw-bg-green-100 tw-rounded-md">Super cheat</button>
                 </div>
             </div>
         </div>
@@ -124,6 +123,7 @@
 import {defineComponent} from 'vue';
 import ModuleButton from "./components/module-button";
 import {useAnimateCss} from "../../../../composables/animateCssComposable";
+import {useReturnNicerNumber} from "../../../../composables/numbersComposable";
 
 export default defineComponent({
     name: "clique",
@@ -135,6 +135,8 @@ export default defineComponent({
             bps: 0,
             bpc: 1,
             nbClicks: 0,
+            bpsInterval: null,
+            savingInterval: null,
             bpsModules: [
                 {
                     name: 'Auto Clicker',
@@ -143,7 +145,6 @@ export default defineComponent({
                         'impressionnable ça vous fera peut-être quelque chose.',
                     slug: 'autoclicker',
                     price: {
-                        current: 50,
                         base: 50,
                         multiplier: 1.1,
                     },
@@ -162,7 +163,6 @@ export default defineComponent({
                         "il faudrait peut-être songer à mettre fin à votre aventure dès maintenant.",
                     slug: 'bananier',
                     price: {
-                        current: 500,
                         base: 500,
                         multiplier: 1.2,
                     },
@@ -181,7 +181,6 @@ export default defineComponent({
                         'pas exactement ça mais bon, vu le prix...',
                     slug: 'macaque',
                     price: {
-                        current: 1000,
                         base: 1000,
                         multiplier: 1.2,
                     },
@@ -199,7 +198,6 @@ export default defineComponent({
                         'remarquablement plus efficiente et pour une paie remarquablement peu supérieure à celle de son compère.',
                     slug: 'gorille',
                     price: {
-                        current: 11000,
                         base: 11000,
                         multiplier: 1.2,
                     },
@@ -218,7 +216,6 @@ export default defineComponent({
                     description: 'Votre curseur mais en mieux. Il clique plus efficacement, sans aucune explication.',
                     slug: 'meilleur-curseur',
                     price: {
-                        current: 200,
                         base: 200,
                         multiplier: 1.2,
                     },
@@ -232,7 +229,6 @@ export default defineComponent({
                     description: 'Votre curseur mais en vraiment, vraiment mieux. Y\'a pas à dire, ça fait toute la différence.',
                     slug: 'curseur-encore-plus-fort',
                     price: {
-                        current: 2000,
                         base: 2000,
                         multiplier: 1.2,
                     },
@@ -250,7 +246,6 @@ export default defineComponent({
                         'en herbe – si le risque élevé de cancer de la gorge, des intestins ou du colon vous importe peu.',
                     slug: 'engrais-monsanto',
                     price: {
-                        current: 6666,
                         base: 6666,
                         multiplier: 1.2,
                     },
@@ -266,11 +261,46 @@ export default defineComponent({
             achievements: [
                 {
                     name: 'Première banane',
+                    text: '1',
+                    description: 'Ouah. Une banane. Très impressionnant, vraiment.',
+                    bonusText: 'Aucun. Vous fichez pas de moi.',
+                    bonus: null,
                     condition: 1,
                     unlocked: false
                 },
                 {
-                    name: 'Le million',
+                    name: 'Cent bananes !',
+                    text: '100',
+                    description: 'Votre colin, avec ou sans bananes ?',
+                    bonusText: 'Toujours rien. On croit pas trop à la redistribution collective ici.',
+                    bonus: null,
+                    condition: 100,
+                    unlocked: false
+                },
+                {
+                    name: 'Mille bananes',
+                    text: '1K',
+                    description: 'Mille bananes. Là, on commence à parler sérieusement.',
+                    bonusText: '+1 bps',
+                    bonus: 1,
+                    condition: 1000,
+                    unlocked: false
+                },
+                {
+                    name: 'UN MILLION',
+                    text: '1M',
+                    description: 'LE MILLION. LE MILLION DE BANANES.',
+                    bonusText: '+10 bps',
+                    bonus: 10,
+                    condition: 1000000,
+                    unlocked: false
+                },
+                {
+                    name: '1%',
+                    text: '1B',
+                    description: 'Avec ça vous allez probablement bientôt songer à créer un paradis fiscal sur Mars.',
+                    bonusText: '+100 bps',
+                    bonus: 100,
                     condition: 1000000,
                     unlocked: false
                 },
@@ -285,6 +315,7 @@ export default defineComponent({
     },
     methods: {
         useAnimateCss,
+        useReturnNicerNumber,
         clickBanana() {
             this.addBanana();
 
@@ -302,10 +333,16 @@ export default defineComponent({
                 bps += module.bps.current * module.numberBought;
             });
 
+            this.achievements.forEach(achievement => {
+                if (achievement.unlocked === true) {
+                    bps += achievement.bonus;
+                }
+            });
+
             return bps;
         },
         startBPS() {
-            setInterval(() => {
+            this.bpsInterval = setInterval(() => {
                 this.bananas += this.bps / 10;
                 this.totalBananas += this.bps / 10;
 
@@ -313,8 +350,10 @@ export default defineComponent({
             }, 100)
         },
         buyModule(module, type, index) {
-            if (this.bananas >= module.price.current) {
-                this.bananas -= module.price.current;
+            let currentPrice = Math.floor(module.price.base * (Math.pow(module.price.multiplier, module.numberBought + 1) - 1) / (module.price.multiplier - 1));
+
+            if (this.bananas >= currentPrice) {
+                this.bananas -= currentPrice;
 
                 module.numberBought++;
 
@@ -340,8 +379,6 @@ export default defineComponent({
 
                     this.bps = this.calcBPS();
                 }
-
-                module.price.current = module.price.current * module.price.multiplier;
             }
         },
         buyNTimes(module, type, n, index) {
@@ -357,7 +394,7 @@ export default defineComponent({
             });
         },
         startAutomaticSaving() {
-            setInterval(() => {
+            this.savingInterval = setInterval(() => {
                 this.save();
             }, 5000)
         },
@@ -367,10 +404,29 @@ export default defineComponent({
                 totalBananas: this.totalBananas,
                 bps: this.bps,
                 bpc: this.bpc,
-                nbClicks: this.nbClicks,
-                bpsModules: this.bpsModules,
-                bpcModules: this.bpcModules
+                nbClicks: this.nbClicks
             };
+
+            saveFile.bpsModules = this.bpsModules.map(module => {
+                return {
+                    slug: module.slug,
+                    numberBought: module.numberBought
+                }
+            });
+
+            saveFile.bpcModules = this.bpcModules.map(module => {
+                return {
+                    slug: module.slug,
+                    numberBought: module.numberBought
+                }
+            });
+
+            saveFile.bpsBuffsModules = this.bpsBuffsModules.map(module => {
+                return {
+                    slug: module.slug,
+                    numberBought: module.numberBought
+                }
+            });
 
             localStorage.setItem('saveFile', btoa(btoa(JSON.stringify(saveFile))));
         },
@@ -385,11 +441,44 @@ export default defineComponent({
                 this.bps = saveFile.bps;
                 this.bpc = saveFile.bpc;
                 this.nbClicks = saveFile.nbClicks;
-                this.bpsModules = saveFile.bpsModules;
-                this.bpcModules = saveFile.bpcModules;
+
+                this.bpsModules.forEach((module, index) => {
+                    let saveModule = saveFile.bpsModules.find(saveModule => saveModule.slug === module.slug);
+
+                    if (saveModule !== undefined) {
+                        module.numberBought = saveModule.numberBought;
+
+                        if (module.numberBought > 0 && index < this.bpsModules.length - 1) {
+                            this.bpsModules[index + 1].unlocked = true;
+                        }
+                    }
+                });
+
+                this.bpcModules.forEach((module, index) => {
+                    let saveModule = saveFile.bpcModules.find(saveModule => saveModule.slug === module.slug);
+
+                    if (saveModule !== undefined) {
+                        module.numberBought = saveModule.numberBought;
+
+                        if (module.numberBought > 0 && index < this.bpcModules.length - 1) {
+                            this.bpcModules[index + 1].unlocked = true;
+                        }
+                    }
+                });
+
+                this.bpsBuffsModules.forEach(module => {
+                    let saveModule = saveFile.bpsBuffsModules.find(saveModule => saveModule.slug === module.slug);
+
+                    if (saveModule !== undefined) {
+                        module.numberBought = saveModule.numberBought;
+                    }
+                });
             }
         },
         reset() {
+            clearInterval(this.bpsInterval);
+            clearInterval(this.savingInterval);
+
             localStorage.removeItem('saveFile');
 
             this.bananas = 0;
@@ -399,7 +488,6 @@ export default defineComponent({
             this.nbClicks = 0;
 
             this.bpsModules.forEach(module => {
-                module.price.current = module.price.base;
                 module.bps.current = module.bps.base;
                 module.numberBought = 0;
             });
@@ -407,58 +495,13 @@ export default defineComponent({
             this.achievements.forEach(achievement => {
                 achievement.unlocked = false;
             });
+
+            this.startBPS();
+            this.startAutomaticSaving();
         },
-        cheat() {
-            this.bananas += 1000000;
-            this.totalBananas += 1000000;
-        },
-        superCheat() {
-            this.bananas += 100000000;
-            this.totalBananas += 100000000;
-        },
-        returnNiceNumber(number) {
-            let formattedNumber;
-
-            switch (true) {
-                case number < 1000000:
-                    formattedNumber = new Intl.NumberFormat('fr-FR').format(Math.floor(number));
-
-                    break;
-                case number < 1000000000:
-                    formattedNumber = new Intl.NumberFormat('fr-FR', {
-                        maximumFractionDigits: 3,
-                        minimumFractionDigits: 3
-                    }).format(Math.floor(number) / 1000000) + 'M';
-
-                    break;
-                case number < 1000000000000:
-                    formattedNumber = new Intl.NumberFormat('fr-FR', {
-                        maximumFractionDigits: 3,
-                        minimumFractionDigits: 3
-                    }).format(Math.floor(number) / 1000000000) + 'B';
-
-                    break;
-                case number < 1000000000000000:
-                    formattedNumber = new Intl.NumberFormat('fr-FR', {
-                        maximumFractionDigits: 3,
-                        minimumFractionDigits: 3
-                    }).format(Math.floor(number) / 1000000000000) + 'T';
-
-                    break;
-                case number < 1000000000000000000:
-                    formattedNumber = new Intl.NumberFormat('fr-FR', {
-                        maximumFractionDigits: 3,
-                        minimumFractionDigits: 3
-                    }).format(Math.floor(number) / 1000000000000000) + 'Q';
-
-                    break;
-                default:
-                    formattedNumber = new Intl.NumberFormat('fr-FR').format(Math.floor(number));
-
-                    break;
-            }
-
-            return formattedNumber;
+        cheat(n) {
+            this.bananas += n;
+            this.totalBananas += n;
         }
     },
     watch: {
