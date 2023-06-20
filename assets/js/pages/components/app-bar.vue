@@ -30,6 +30,8 @@
                         </v-list-item>
 
                         <v-list-item prepend-icon="mdi-cog" title="Paramètres" value="settings" rounded="xl" @click="value = 'settings'"></v-list-item>
+
+                        <v-list-item prepend-icon="mdi-information" title="À propos" value="about" rounded="xl" @click="value = 'about'"></v-list-item>
                     </v-list>
                 </div>
             </v-navigation-drawer>

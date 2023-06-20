@@ -16,6 +16,7 @@
         <exploration v-show="page === 'exploration'"></exploration>
         <achievements v-show="page === 'achievements'" :achievements="achievements"></achievements>
         <settings v-show="page === 'settings'"></settings>
+        <about v-show="page === 'about'"></about>
     </div>
 </template>
 
@@ -26,10 +27,11 @@ import Exploration from "./components/exploration/exploration";
 import Achievements from "./components/achievements/achievements";
 import Settings from "./components/settings/settings";
 import AppBar from "@pages/components/app-bar";
+import About from "@pages/game/components/about/about.vue";
 
 export default defineComponent({
     name: "index",
-    components: {AppBar, Settings, Achievements, Exploration, Clique},
+    components: {About, AppBar, Settings, Achievements, Exploration, Clique},
     data: () => ({
         achievements: [],
         page: 'click'

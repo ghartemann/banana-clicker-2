@@ -10,7 +10,7 @@
             </h1>
         </div>
 
-        <div class="tw-w-1/2 tw-text-white tw-text-center tw-flex tw-flex-col tw-items-center tw-gap-5 tw-p-5 tw-rounded-2xl animate__animated animate__bounceIn" id="content">
+        <div class="tw-bg-[#051d1d] tw-w-1/2 tw-text-white tw-text-center tw-flex tw-flex-col tw-items-center tw-gap-5 tw-p-5 tw-rounded-2xl animate__animated animate__bounceIn" id="content">
             <div>
                 Après vos déboires dans la jungle et la faillite de votre entreprise capitaliste de production bananière
                 porteuse de valeurs fortes telles que l'exploitation arboricole, minière, animale et humaine, vous
@@ -109,8 +109,9 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 #content {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    //background: rgba(60, 60, 60, 0.35);
+    //backdrop-filter: blur(4px);
+    //-webkit-backdrop-filter: blur(4px);
+
 }
 </style>
