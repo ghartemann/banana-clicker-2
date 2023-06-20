@@ -1,5 +1,7 @@
 <template>
-    <div class="tw-max-w-full tw-m-auto">
+    <app-bar @change-page="(value) => page = value" :achievements="achievements.filter((a) => a.unlocked === true && a.seen === false).length"></app-bar>
+
+    <div class="tw-max-w-full tw-m-auto tw-pl-14">
         <div class="tw-flex tw-justify-center tw-gap-5">
             <h1 class="tw-text-6xl tw-text-center tw-py-10 tw-text-green-dark tw-font-medium">
                 Banana Clicker
@@ -23,19 +25,14 @@ import Clique from "./components/clique/clique";
 import Exploration from "./components/exploration/exploration";
 import Achievements from "./components/achievements/achievements";
 import Settings from "./components/settings/settings";
-import achievements from "@pages/game/components/achievements/achievements.vue";
+import AppBar from "@pages/components/app-bar";
 
 export default defineComponent({
     name: "index",
-    components: {Settings, Achievements, Exploration, Clique},
-    props: {
-        page: {
-            type: String,
-            required: true,
-        },
-    },
+    components: {AppBar, Settings, Achievements, Exploration, Clique},
     data: () => ({
         achievements: [],
+        page: 'click'
     }),
     created() {
         console.log('ATTENTON: il est strictement INTERDIT d\'utiliser la console pour tricher. Si vous le faites, ' +
@@ -45,6 +42,7 @@ export default defineComponent({
     }
 })
 </script>
+
 <style scoped>
 
 </style>

@@ -21,7 +21,7 @@
         </div>
 
         <div class="tw-col-span-1 tw-flex tw-flex-col tw-items-center tw-text-center animate-bounce delay-150 duration-300">
-            <button class="tw-bg-green-dark tw-rounded-full tw-w-fit tw-p-8 tw-shadow tw-m-5">
+            <button class="tw-rounded-full tw-w-fit tw-p-8 tw-shadow tw-m-5" id="content">
                 <img ref="banane"
                      src="/assets/images/banane.png" alt="Banana"
                      class="tw-w-36 tw-h-36 animate__faster"
@@ -266,7 +266,8 @@ export default defineComponent({
                     bonusText: 'Aucun. Vous fichez pas de moi.',
                     bonus: null,
                     condition: 1,
-                    unlocked: false
+                    unlocked: false,
+                    seen: false
                 },
                 {
                     name: 'Cent bananes !',
@@ -275,7 +276,8 @@ export default defineComponent({
                     bonusText: 'Toujours rien. On croit pas trop à la redistribution collective ici.',
                     bonus: null,
                     condition: 100,
-                    unlocked: false
+                    unlocked: false,
+                    seen: false
                 },
                 {
                     name: 'Mille bananes',
@@ -284,7 +286,8 @@ export default defineComponent({
                     bonusText: '+1 bps',
                     bonus: 1,
                     condition: 1000,
-                    unlocked: false
+                    unlocked: false,
+                    seen: false
                 },
                 {
                     name: 'UN MILLION',
@@ -293,7 +296,8 @@ export default defineComponent({
                     bonusText: '+10 bps',
                     bonus: 10,
                     condition: 1000000,
-                    unlocked: false
+                    unlocked: false,
+                    seen: false
                 },
                 {
                     name: '1%',
@@ -302,7 +306,8 @@ export default defineComponent({
                     bonusText: '+100 bps',
                     bonus: 100,
                     condition: 1000000,
-                    unlocked: false
+                    unlocked: false,
+                    seen: false
                 },
             ]
         }
@@ -514,6 +519,10 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+#content {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
 </style>

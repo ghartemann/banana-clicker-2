@@ -10,8 +10,8 @@
             </h1>
         </div>
 
-        <div class="tw-w-1/2 tw-text-white tw-text-center tw-flex tw-flex-col tw-items-center tw-gap-5 tw-p-5 tw-rounded-2xl animate__animated animate__bounceIn" id="test">
-            <div class="">
+        <div class="tw-w-1/2 tw-text-white tw-text-center tw-flex tw-flex-col tw-items-center tw-gap-5 tw-p-5 tw-rounded-2xl animate__animated animate__bounceIn" id="content">
+            <div>
                 Après vos déboires dans la jungle et la faillite de votre entreprise capitaliste de production bananière
                 porteuse de valeurs fortes telles que l'exploitation arboricole, minière, animale et humaine, vous
                 décidez qu'après tout, zut, vous êtes loin d'avoir dit votre dernier mot. Ce qui demeure de votre
@@ -46,7 +46,7 @@
 <!--                Assez lu, je veux des bananes-->
 <!--            </v-btn>-->
 
-            <div>{{timerValue}}</div>
+            <div class="tw-text-2xl">{{timerValue}}</div>
         </div>
     </div>
 </template>
@@ -68,7 +68,7 @@ export default defineComponent({
         startCountDown() {
             clearInterval(this.timerInterval);
 
-            let endAt = moment('2023-06-08 09:30:26');
+            let endAt = moment('2023-07-14 11:30:00');
 
             this.timerInterval = setInterval(() => {
                 let timeLeft = moment.duration(endAt.diff(moment()));
@@ -79,7 +79,23 @@ export default defineComponent({
                     return;
                 }
 
-                this.timerValue = moment(timeLeft.asDays() + ' jours,' + moment(timeLeft.asMilliseconds()).format('hh:mm:ss'));
+                let string = '';
+
+                if (timeLeft.asDays() >= 1) {
+                    string += moment(timeLeft.asDays()) + ' jours, ';
+                }
+
+                if (timeLeft.asHours() >= 1) {
+                    string += moment(timeLeft.hours()) + ' heures, ';
+                }
+
+                if (timeLeft.asMinutes() >= 1) {
+                    string += moment(timeLeft.minutes()) + ' minutes, ';
+                }
+
+                string += moment(timeLeft.seconds()) + ' secondes';
+
+                this.timerValue = string;
             }, 500);
         },
     }
@@ -87,7 +103,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-#test {
+#content {
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);

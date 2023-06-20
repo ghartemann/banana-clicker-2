@@ -1,22 +1,22 @@
 <template>
-    <div>
-        <div class="tw-grid tw-grid-cols-12">
-            <v-tooltip v-for="achievement in achievements" bottom content-class='custom-tooltip' :disabled="achievement.unlocked === false">
-                <template v-slot:activator="{ props }">
+    <div class="tw-grid tw-grid-cols-12">
+        <v-tooltip v-for="achievement in achievements" bottom content-class='custom-tooltip' :disabled="achievement.unlocked === false">
+            <template v-slot:activator="{ props }">
+                <v-badge color="error" :model-value="achievement.unlocked === true && achievement.seen === false">
                     <div v-bind="props"
                          class="tw-text-white tw-border tw-rounded-lg tw-w-16 tw-h-16 tw-justify-center tw-flex tw-items-center tw-flex tw-flex-col tw-gap-3"
                          :class="achievement.unlocked === true ? 'tw-border-yellow-dark' : 'tw-border-green-dark tw-opacity-40'">
                         {{ achievement.text }}
                     </div>
-                </template>
+                </v-badge>
+            </template>
 
-                <div>
-                    <div class="tw-font-bold">{{ achievement.name }}</div>
-                    <div>{{ achievement.description }}</div>
-                    <div>Bonus : {{ achievement.bonusText }}</div>
-                </div>
-            </v-tooltip>
-        </div>
+            <div>
+                <div class="tw-font-bold">{{ achievement.name }}</div>
+                <div>{{ achievement.description }}</div>
+                <div>Bonus : {{ achievement.bonusText }}</div>
+            </div>
+        </v-tooltip>
     </div>
 </template>
 

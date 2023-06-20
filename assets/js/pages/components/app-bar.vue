@@ -20,7 +20,15 @@
                     <v-list density="compact" nav>
                         <v-list-item prepend-icon="mdi-cursor-default-click" title="Clique" value="click" rounded="xl" @click="value = 'click'"></v-list-item>
                         <v-list-item prepend-icon="mdi-compass" title="Exploration" value="exploration" rounded="xl" @click="value = 'exploration'"></v-list-item>
-                        <v-list-item prepend-icon="mdi-trophy" title="Succès" value="achievements" rounded="xl" @click="value = 'achievements'"></v-list-item>
+
+                        <v-list-item title="Succès" value="achievements" rounded="xl" @click="value = 'achievements'">
+                            <template v-slot:prepend>
+                                <v-badge color="error" :content="achievements">
+                                    <v-icon>mdi-trophy</v-icon>
+                                </v-badge>
+                            </template>
+                        </v-list-item>
+
                         <v-list-item prepend-icon="mdi-cog" title="Paramètres" value="settings" rounded="xl" @click="value = 'settings'"></v-list-item>
                     </v-list>
                 </div>
@@ -37,6 +45,12 @@ export default defineComponent({
     data: () => ({
         value: 'click'
     }),
+    props: {
+        achievements: {
+            type: Number,
+            required: true
+        }
+    },
     watch: {
         value() {
             this.$emit('change-page', this.value);
