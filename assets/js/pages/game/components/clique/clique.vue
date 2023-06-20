@@ -8,11 +8,11 @@
             <div v-if="bpsModules[0].numberBought > 0 || bananas >= 30" class="tw-flex tw-flex-col tw-gap-4">
                 <template v-for="(bpsModule, index) in bpsModules" :key="index">
                     <module-button
-                            v-if="bpsModule.unlocked === true"
-                            :bananas="bananas"
-                            :module="bpsModule"
-                            type="bps"
-                            @buy-n-times="(module, type, n) => buyNTimes(module, type, n, index)">
+                        v-if="bpsModule.unlocked === true"
+                        :bananas="bananas"
+                        :module="bpsModule"
+                        type="bps"
+                        @buy-n-times="(module, type, n) => buyNTimes(module, type, n, index)">
                     </module-button>
                 </template>
             </div>
@@ -20,7 +20,8 @@
             <div v-else class="tw-text-2xl tw-text-white">Cliquez sur la banane.</div>
         </div>
 
-        <div class="tw-col-span-1 tw-flex tw-flex-col tw-items-center tw-text-center animate-bounce delay-150 duration-300">
+        <div
+            class="tw-col-span-1 tw-flex tw-flex-col tw-items-center tw-text-center animate-bounce delay-150 duration-300">
             <button class="tw-rounded-full tw-w-fit tw-p-8 tw-shadow tw-m-5" id="content">
                 <img ref="banane"
                      src="/assets/images/banane.png" alt="Banana"
@@ -92,7 +93,8 @@
                 Améliorations
             </h2>
 
-            <div v-if="bpcModules[0].unlocked === true || bpsBuffsModules[0].unlocked === true" class="tw-flex tw-flex-col tw-gap-4">
+            <div v-if="bpcModules[0].unlocked === true || bpsBuffsModules[0].unlocked === true"
+                 class="tw-flex tw-flex-col tw-gap-4">
                 <template v-for="(bpcModule, index) in bpcModules" :key="index">
                     <module-button
                         v-if="bpcModule.unlocked === true"
@@ -305,7 +307,7 @@ export default defineComponent({
                     description: 'Avec ça vous allez probablement bientôt songer à créer un paradis fiscal sur Mars.',
                     bonusText: '+100 bps',
                     bonus: 100,
-                    condition: 1000000,
+                    condition: 1000000000,
                     unlocked: false,
                     seen: false
                 },
@@ -433,6 +435,14 @@ export default defineComponent({
                 }
             });
 
+            saveFile.achievements = this.achievements.map(achievement => {
+                return {
+                    name: achievement.name,
+                    unlocked: achievement.unlocked,
+                    seen: achievement.seen
+                }
+            });
+
             localStorage.setItem('saveFile', btoa(btoa(JSON.stringify(saveFile))));
         },
         load() {
@@ -448,34 +458,51 @@ export default defineComponent({
                 this.nbClicks = saveFile.nbClicks;
 
                 this.bpsModules.forEach((module, index) => {
-                    let saveModule = saveFile.bpsModules.find(saveModule => saveModule.slug === module.slug);
+                    if (saveFile.bpsModules) {
+                        let saveModule = saveFile.bpsModules.find(saveModule => saveModule.slug === module.slug);
 
-                    if (saveModule !== undefined) {
-                        module.numberBought = saveModule.numberBought;
+                        if (saveModule !== undefined) {
+                            module.numberBought = saveModule.numberBought;
 
-                        if (module.numberBought > 0 && index < this.bpsModules.length - 1) {
-                            this.bpsModules[index + 1].unlocked = true;
+                            if (module.numberBought > 0 && index < this.bpsModules.length - 1) {
+                                this.bpsModules[index + 1].unlocked = true;
+                            }
                         }
                     }
                 });
 
                 this.bpcModules.forEach((module, index) => {
-                    let saveModule = saveFile.bpcModules.find(saveModule => saveModule.slug === module.slug);
+                    if (saveFile.bpcModules) {
+                        let saveModule = saveFile.bpcModules.find(saveModule => saveModule.slug === module.slug);
 
-                    if (saveModule !== undefined) {
-                        module.numberBought = saveModule.numberBought;
+                        if (saveModule !== undefined) {
+                            module.numberBought = saveModule.numberBought;
 
-                        if (module.numberBought > 0 && index < this.bpcModules.length - 1) {
-                            this.bpcModules[index + 1].unlocked = true;
+                            if (module.numberBought > 0 && index < this.bpcModules.length - 1) {
+                                this.bpcModules[index + 1].unlocked = true;
+                            }
                         }
                     }
                 });
 
                 this.bpsBuffsModules.forEach(module => {
-                    let saveModule = saveFile.bpsBuffsModules.find(saveModule => saveModule.slug === module.slug);
+                    if (saveFile.bpsBuffsModules) {
+                        let saveModule = saveFile.bpsBuffsModules.find(saveModule => saveModule.slug === module.slug);
 
-                    if (saveModule !== undefined) {
-                        module.numberBought = saveModule.numberBought;
+                        if (saveModule !== undefined) {
+                            module.numberBought = saveModule.numberBought;
+                        }
+                    }
+                });
+
+                this.achievements.forEach(achievement => {
+                    if (saveFile.achievements) {
+                        let saveAchievement = saveFile.achievements.find(saveAchievement => saveAchievement.name === achievement.name);
+
+                        if (saveAchievement !== undefined) {
+                            achievement.unlocked = saveAchievement.unlocked;
+                            achievement.seen = saveAchievement.seen;
+                        }
                     }
                 });
             }
@@ -499,6 +526,7 @@ export default defineComponent({
 
             this.achievements.forEach(achievement => {
                 achievement.unlocked = false;
+                achievement.seen = false;
             });
 
             this.startBPS();

@@ -68,13 +68,14 @@ export default defineComponent({
         startCountDown() {
             clearInterval(this.timerInterval);
 
-            let endAt = moment('2023-07-14 11:30:00');
+            let startedAt = moment('2023-06-14 07:06:00');
+            let endAt = startedAt.add(1, 'month');
 
             this.timerInterval = setInterval(() => {
                 let timeLeft = moment.duration(endAt.diff(moment()));
 
                 if (timeLeft.asSeconds() < 0) {
-                    this.timerValue = "0:00:00";
+                    this.timerValue = "TEMPS ÉCOULÉ";
 
                     return;
                 }
@@ -93,10 +94,14 @@ export default defineComponent({
                     string += moment(timeLeft.minutes()) + ' minutes, ';
                 }
 
-                string += moment(timeLeft.seconds()) + ' secondes';
+                if (timeLeft.asSeconds() >= 1) {
+                    string += moment(timeLeft.seconds()) + ' secondes, ';
+                }
+
+                string += moment(timeLeft.milliseconds()).format('SSS') + ' ms';
 
                 this.timerValue = string;
-            }, 500);
+            }, 1);
         },
     }
 })

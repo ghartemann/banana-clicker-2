@@ -12,6 +12,7 @@ module.exports = {
             colors: {
                 transparent: 'transparent',
                 current: 'currentColor',
+                error: '#d54b4b',
                 'white': '#ffffff',
                 'purple': '#3f3cbb',
                 'green-darker': '#0f5b01',
