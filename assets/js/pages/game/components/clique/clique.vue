@@ -1,5 +1,8 @@
 <template>
     <div class="tw-grid tw-grid-cols-3 tw-gap-10">
+<!--        TODO: regarder si ça update bien bpsModules d'ici quand on update dans le coposant-->
+<!--        <shop :bps-modules="bpsModules" :bananas="bananas"></shop>-->
+
         <div class="tw-col-span-1 tw-flex tw-flex-col tw-gap-5">
             <h2 class="tw-text-4xl tw-text-white tw-font-bold">
                 Magasin
@@ -133,10 +136,11 @@ import {defineComponent} from 'vue';
 import ModuleButton from "./components/module-button";
 import {useAnimateCss} from "../../../../composables/animateCssComposable";
 import {useReturnNicerNumber} from "../../../../composables/numbersComposable";
+import Shop from "@pages/game/components/clique/components/shop.vue";
 
 export default defineComponent({
     name: "clique",
-    components: {ModuleButton},
+    components: {Shop, ModuleButton},
     data() {
         return {
             bananas: 0,

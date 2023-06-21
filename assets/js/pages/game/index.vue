@@ -21,13 +21,13 @@
 </template>
 
 <script>
-import {defineComponent} from 'vue'
+import {defineComponent} from 'vue';
 import Clique from "./components/clique/clique";
 import Exploration from "./components/exploration/exploration";
 import Achievements from "./components/achievements/achievements";
 import Settings from "./components/settings/settings";
 import AppBar from "@pages/components/app-bar";
-import About from "@pages/game/components/about/about.vue";
+import About from "@pages/game/components/about/about";
 
 export default defineComponent({
     name: "index",
