@@ -14,7 +14,7 @@
                     ></v-list-item>
                 </v-list>
 
-                <v-divider></v-divider>
+                <v-divider class="mb-4"></v-divider>
 
                 <div class="tw-flex tw-flex-col tw-justify-between tw-text-white">
                     <v-list density="compact" nav>
@@ -28,6 +28,8 @@
                                 </v-badge>
                             </template>
                         </v-list-item>
+
+                        <v-divider class="my-5"></v-divider>
 
                         <v-list-item prepend-icon="mdi-cog" title="Paramètres" value="settings" rounded="xl" @click="value = 'settings'"></v-list-item>
 

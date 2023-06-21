@@ -63,6 +63,13 @@
                     </v-tooltip>
 
                     <div>
+                        BPS dû aux clics :
+                        <span class="tw-font-bold">
+                            {{ useReturnNicerNumber(bpsFromClicks) }}
+                        </span>
+                    </div>
+
+                    <div>
                         Total :
                         <span class="tw-font-bold">
                             {{ useReturnNicerNumber(totalBananas) }}
@@ -101,7 +108,7 @@
                         :bananas="bananas"
                         :module="bpcModule"
                         type="bpc"
-                        @buy="(module, type) => buyModule(module, type)">
+                        @buy-n-times="(module, type, n) => buyNTimes(module, type, n, index)">
                     </module-button>
                 </template>
 
@@ -111,7 +118,7 @@
                         :bananas="bananas"
                         :module="bpsBuffsModule"
                         type="buff"
-                        @buy="(module, type) => buyModule(module, type)">
+                        @buy-n-times="(module, type, n) => buyNTimes(module, type, n, index)">
                     </module-button>
                 </template>
             </div>
@@ -139,6 +146,9 @@ export default defineComponent({
             nbClicks: 0,
             bpsInterval: null,
             savingInterval: null,
+            BPSFromClicksInterval: null,
+            nbClicksClickrate: 0,
+            bpsFromClicks: 0,
             bpsModules: [
                 {
                     name: 'Auto Clicker',
@@ -222,6 +232,7 @@ export default defineComponent({
                         multiplier: 1.2,
                     },
                     bpc: 1,
+                    nbClicksCondition: 100,
                     unlocked: false,
                     numberBought: 0
                 },
@@ -235,6 +246,7 @@ export default defineComponent({
                         multiplier: 1.2,
                     },
                     bpc: 5,
+                    nbClicksCondition: 1000,
                     unlocked: false,
                     numberBought: 0
                 }
@@ -318,6 +330,7 @@ export default defineComponent({
         this.load();
 
         this.startBPS();
+        this.startBPSFromClicks();
         this.startAutomaticSaving();
     },
     methods: {
@@ -326,12 +339,23 @@ export default defineComponent({
         clickBanana() {
             this.addBanana();
 
+            this.unlockBpcModules();
+
             this.useAnimateCss(this.$refs.banane, 'jello');
         },
         addBanana() {
             this.bananas += this.bpc;
             this.totalBananas += this.bpc;
             this.nbClicks++;
+            this.nbClicksClickrate++;
+        },
+        startBPSFromClicks() {
+            this.BPSFromClicksInterval = setInterval(() => {
+                const clickRate = this.nbClicksClickrate;
+                this.nbClicksClickrate = 0;
+                // Call your function to calculate BPS and update the display
+                this.bpsFromClicks = this.bpc * clickRate;
+            }, 1000);
         },
         calcBPS() {
             let bps = 0;
@@ -392,6 +416,13 @@ export default defineComponent({
             for (let i = 0; i < n; i++) {
                 this.buyModule(module, type, index);
             }
+        },
+        unlockBpcModules() {
+            this.bpcModules.forEach(module => {
+                if (this.nbClicks >= module.nbClicksCondition) {
+                    module.unlocked = true;
+                }
+            });
         },
         unlockAchievements() {
             this.achievements.forEach(achievement => {
