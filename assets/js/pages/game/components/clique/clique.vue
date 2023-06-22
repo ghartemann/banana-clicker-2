@@ -25,12 +25,11 @@
 
         <div
             class="tw-col-span-1 tw-flex tw-flex-col tw-items-center tw-text-center animate-bounce delay-150 duration-300">
-            <button class="tw-rounded-full tw-w-fit tw-p-8 tw-shadow tw-m-5" id="content">
+            <button class="tw-rounded-full tw-w-fit tw-p-8 tw-shadow tw-m-5" id="content" @click="clickBanana">
                 <img ref="banane"
                      src="/assets/images/banane.png" alt="Banana"
                      class="tw-w-36 tw-h-36 animate__faster"
-                     style="--animate-duration: 0.2s;"
-                     @click="clickBanana">
+                     style="--animate-duration: 0.2s;">
             </button>
 
             <div class="tw-w-full tw-flex tw-flex-col tw-gap-5 tw-items-center">

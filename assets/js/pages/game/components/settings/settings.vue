@@ -15,7 +15,7 @@
             </div>
 
             <div>
-                <v-text-field label="Save file" :model-value="save"></v-text-field>
+                <v-file-input label="Save file" :model-value="save" v-model="save"></v-file-input>
 
                 <button @click="saveImport"
                         style="--animate-duration:0.1s;"
@@ -34,7 +34,7 @@ import {defineComponent} from 'vue';
 export default defineComponent({
     name: "settings",
     data: () => ({
-        save: ''
+        save: null
     }),
     methods: {
         saveExport() {
@@ -49,9 +49,16 @@ export default defineComponent({
             downloadAnchorNode.remove();
         },
         saveImport() {
-            const data = JSON.parse(this.save);
+            console.log(this.save)
+            let reader = new FileReader();
 
-            localStorage.setItem('saveFile', data);
+            reader.onload = (e) => {
+                let data = JSON.stringify(e.target.result);
+                console.log(data)
+                localStorage.setItem('saveFile', data);
+            };
+
+            reader.readAsText(this.save[0]);
         }
     }
 })

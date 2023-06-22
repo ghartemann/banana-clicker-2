@@ -12,11 +12,27 @@
             </h1>
         </div>
 
-        <clique v-show="page === 'click'" @achievements-updated="(ach) => this.achievements = ach"></clique>
-        <exploration v-show="page === 'exploration'"></exploration>
-        <achievements v-show="page === 'achievements'" :achievements="achievements"></achievements>
-        <settings v-show="page === 'settings'"></settings>
-        <about v-show="page === 'about'"></about>
+        <clique
+            v-show="page === 'click'"
+            @achievements-updated="(ach) => this.achievements = ach">
+        </clique>
+
+        <exploration
+            v-show="page === 'exploration'">
+        </exploration>
+
+        <achievements
+            v-show="page === 'achievements'"
+            :achievements="achievements">
+        </achievements>
+
+        <settings
+            v-show="page === 'settings'">
+        </settings>
+
+        <about
+            v-show="page === 'about'">
+        </about>
     </div>
 </template>
 
