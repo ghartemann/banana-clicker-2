@@ -282,6 +282,8 @@ export default defineComponent({
                     description: 'Ouah. Une banane. Très impressionnant, vraiment.',
                     bonusText: 'Aucun. Vous fichez pas de moi.',
                     bonus: null,
+                    conditionType: 'totalBananas',
+                    picture: 'banane',
                     condition: 1,
                     unlocked: false,
                     seen: false
@@ -292,6 +294,8 @@ export default defineComponent({
                     description: 'Votre colin, avec ou sans bananes ?',
                     bonusText: 'Toujours rien. On croit pas trop à la redistribution collective ici.',
                     bonus: null,
+                    conditionType: 'totalBananas',
+                    picture: 'banane',
                     condition: 100,
                     unlocked: false,
                     seen: false
@@ -302,6 +306,8 @@ export default defineComponent({
                     description: 'Mille bananes. Là, on commence à parler sérieusement.',
                     bonusText: '+1 bps',
                     bonus: 1,
+                    conditionType: 'totalBananas',
+                    picture: 'banane',
                     condition: 1000,
                     unlocked: false,
                     seen: false
@@ -312,6 +318,8 @@ export default defineComponent({
                     description: 'LE MILLION. LE MILLION DE BANANES.',
                     bonusText: '+10 bps',
                     bonus: 10,
+                    conditionType: 'totalBananas',
+                    picture: 'banane',
                     condition: 1000000,
                     unlocked: false,
                     seen: false
@@ -322,7 +330,45 @@ export default defineComponent({
                     description: 'Avec ça vous allez probablement bientôt songer à créer un paradis fiscal sur Mars.',
                     bonusText: '+100 bps',
                     bonus: 100,
+                    conditionType: 'totalBananas',
+                    picture: 'banane',
                     condition: 1000000000,
+                    unlocked: false,
+                    seen: false
+                },
+                {
+                    name: 'Clic clic, banane, clic clic.',
+                    text: '100',
+                    description: 'Ça commence à faire quelques clics.',
+                    bonusText: 'Que dalle.',
+                    bonus: null,
+                    conditionType: 'nbClicks',
+                    picture: 'modules/bpc/clicker',
+                    condition: 100,
+                    unlocked: false,
+                    seen: false
+                },
+                {
+                    name: 'Attention la tendinite',
+                    text: '1K',
+                    description: 'Ce serait dommage de se retrouver en accident de travail...',
+                    bonusText: '+1 bpc',
+                    bonus: 1,
+                    conditionType: 'nbClicks',
+                    picture: 'modules/bpc/clicker',
+                    condition: 1000,
+                    unlocked: false,
+                    seen: false
+                },
+                {
+                    name: 'Tant pis pour vous',
+                    text: '10K',
+                    description: 'J\'aurai prévenu perso je suis à l\'abri',
+                    bonusText: '+10 bpc',
+                    bonus: 10,
+                    conditionType: 'nbClicks',
+                    picture: 'modules/bpc/clicker',
+                    condition: 10000,
                     unlocked: false,
                     seen: false
                 },
@@ -429,7 +475,19 @@ export default defineComponent({
         },
         unlockAchievements() {
             this.achievements.forEach(achievement => {
-                if (this.totalBananas >= achievement.condition) {
+                if (achievement.conditionType === 'totalBananas' && this.totalBananas >= achievement.condition) {
+                    achievement.unlocked = true;
+                }
+
+                if (achievement.conditionType === 'nbClicks' && this.nbClicks >= achievement.condition) {
+                    achievement.unlocked = true;
+                }
+
+                if (achievement.conditionType === 'bps' && this.bps >= achievement.condition) {
+                    achievement.unlocked = true;
+                }
+
+                if (achievement.conditionType === 'bpc' && this.bpc >= achievement.condition) {
                     achievement.unlocked = true;
                 }
             });

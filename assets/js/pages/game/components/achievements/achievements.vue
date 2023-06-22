@@ -13,9 +13,10 @@
                         <v-badge color="#d54b4b" :model-value="achievement.unlocked === true && achievement.seen === false" content="!">
                             <div v-bind="props"
                                  @mouseover="achievement.seen = achievement.unlocked === true"
-                                 class="tw-text-white tw-border-2 tw-rounded-lg tw-w-16 tw-h-16 tw-justify-center tw-flex tw-flex-col tw-items-center tw-gap-3"
-                                 :class="achievement.unlocked === true ? 'tw-border-yellow-dark' : 'tw-border-green-dark tw-opacity-40'">
-                                {{ achievement.text }}
+                                 class="tw-text-white tw-border-2 tw-rounded-lg tw-w-16 tw-h-16 tw-justify-center tw-flex tw-flex-col tw-items-center tw-gap-3 tw-relative"
+                                 :class="achievement.unlocked === true ? 'tw-border-yellow-darker tw-bg-yellow-dark' : 'tw-border-green-darker tw-bg-green-dark tw-opacity-40'">
+                                <img :src="'/assets/images/' + achievement.picture + '.png'" alt="Banana" class="tw-w-10 tw-h-10">
+                                <div class="tw-absolute tw-text-xl tw-text-black tw-font-black">{{ achievement.text }}</div>
                             </div>
                         </v-badge>
                     </template>
