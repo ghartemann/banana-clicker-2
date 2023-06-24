@@ -23,8 +23,7 @@
             <div v-else class="tw-text-2xl tw-text-white">Cliquez sur la banane.</div>
         </div>
 
-        <div
-            class="tw-col-span-1 tw-flex tw-flex-col tw-items-center tw-text-center animate-bounce delay-150 duration-300">
+        <div class="tw-col-span-1 tw-flex tw-flex-col tw-items-center tw-text-center">
             <button class="tw-rounded-full tw-w-fit tw-p-8 tw-shadow tw-m-5" id="content" @click="clickBanana">
                 <img ref="banane"
                      src="/assets/images/banane.png" alt="Banana"
@@ -161,7 +160,7 @@ export default defineComponent({
                     slug: 'autoclicker',
                     price: {
                         base: 50,
-                        multiplier: 1.1,
+                        multiplier: 1.09,
                     },
                     bps: {
                         current: 1,
@@ -179,7 +178,7 @@ export default defineComponent({
                     slug: 'bananier',
                     price: {
                         base: 500,
-                        multiplier: 1.2,
+                        multiplier: 1.11,
                     },
                     bps: {
                         current: 5,
@@ -196,8 +195,8 @@ export default defineComponent({
                         'pas exactement ça mais bon, vu le prix...',
                     slug: 'macaque',
                     price: {
-                        base: 1000,
-                        multiplier: 1.2,
+                        base: 5000,
+                        multiplier: 1.15,
                     },
                     bps: {
                         current: 10,
@@ -213,8 +212,8 @@ export default defineComponent({
                         'remarquablement plus efficiente et pour une paie remarquablement peu supérieure à celle de son compère.',
                     slug: 'gorille',
                     price: {
-                        base: 11000,
-                        multiplier: 1.2,
+                        base: 29000,
+                        multiplier: 1.18,
                     },
                     bps: {
                         current: 40,
@@ -280,8 +279,10 @@ export default defineComponent({
                     name: 'Première banane',
                     text: '1',
                     description: 'Ouah. Une banane. Très impressionnant, vraiment.',
-                    bonusText: 'Aucun. Vous fichez pas de moi.',
-                    bonus: null,
+                    bonus: {
+                        value: 1,
+                        text: 'Aucun. Vous vous attendiez à quoi ?'
+                    },
                     conditionType: 'totalBananas',
                     picture: 'banane',
                     condition: 1,
@@ -292,8 +293,10 @@ export default defineComponent({
                     name: 'Cent bananes !',
                     text: '100',
                     description: 'Votre colin, avec ou sans bananes ?',
-                    bonusText: 'Toujours rien. On croit pas trop à la redistribution collective ici.',
-                    bonus: null,
+                    bonus: {
+                        value: null,
+                        text: 'Toujours rien. On croit pas trop à la redistribution collective ici.'
+                    },
                     conditionType: 'totalBananas',
                     picture: 'banane',
                     condition: 100,
@@ -304,8 +307,11 @@ export default defineComponent({
                     name: 'Mille bananes',
                     text: '1K',
                     description: 'Mille bananes. Là, on commence à parler sérieusement.',
-                    bonusText: '+1 bps',
-                    bonus: 1,
+                    bonus: {
+                        value: 1,
+                        text: '+1 bps',
+                        type: 'bps'
+                    },
                     conditionType: 'totalBananas',
                     picture: 'banane',
                     condition: 1000,
@@ -316,8 +322,11 @@ export default defineComponent({
                     name: 'UN MILLION',
                     text: '1M',
                     description: 'LE MILLION. LE MILLION DE BANANES.',
-                    bonusText: '+10 bps',
-                    bonus: 10,
+                    bonus: {
+                        value: 10,
+                        text: '+10 bps',
+                        type: 'bps'
+                    },
                     conditionType: 'totalBananas',
                     picture: 'banane',
                     condition: 1000000,
@@ -328,8 +337,11 @@ export default defineComponent({
                     name: '1%',
                     text: '1B',
                     description: 'Avec ça vous allez probablement bientôt songer à créer un paradis fiscal sur Mars.',
-                    bonusText: '+100 bps',
-                    bonus: 100,
+                    bonus: {
+                        value: 100,
+                        text: '+100 bps',
+                        type: 'bps'
+                    },
                     conditionType: 'totalBananas',
                     picture: 'banane',
                     condition: 1000000000,
@@ -340,8 +352,10 @@ export default defineComponent({
                     name: 'Clic clic, banane, clic clic.',
                     text: '100',
                     description: 'Ça commence à faire quelques clics.',
-                    bonusText: 'Que dalle.',
-                    bonus: null,
+                    bonus: {
+                        value: null,
+                        text: 'Que dalle.'
+                    },
                     conditionType: 'nbClicks',
                     picture: 'modules/bpc/clicker',
                     condition: 100,
@@ -352,8 +366,12 @@ export default defineComponent({
                     name: 'Attention la tendinite',
                     text: '1K',
                     description: 'Ce serait dommage de se retrouver en accident de travail...',
-                    bonusText: '+1 bpc',
-                    bonus: 1,
+                    bonus: {
+                        value: 1,
+                        text: '+1 bpc',
+                        type: 'bpc',
+                        applied: false
+                    },
                     conditionType: 'nbClicks',
                     picture: 'modules/bpc/clicker',
                     condition: 1000,
@@ -364,8 +382,12 @@ export default defineComponent({
                     name: 'Tant pis pour vous',
                     text: '10K',
                     description: 'J\'aurai prévenu perso je suis à l\'abri',
-                    bonusText: '+10 bpc',
-                    bonus: 10,
+                    bonus: {
+                        value: 10,
+                        text: '+10 bpc',
+                        type: 'bpc',
+                        applied: false
+                    },
                     conditionType: 'nbClicks',
                     picture: 'modules/bpc/clicker',
                     condition: 10000,
@@ -378,7 +400,7 @@ export default defineComponent({
     created() {
         this.load();
 
-        this.startBPS();
+        // this.startBPS();
         this.startBPSFromClicks();
         this.startAutomaticSaving();
     },
@@ -398,11 +420,21 @@ export default defineComponent({
             this.nbClicks++;
             this.nbClicksClickrate++;
         },
+        startBPS() {
+            this.bpsInterval = setInterval(() => {
+                this.calcBPS();
+
+                this.bananas += this.bps / 10;
+                this.totalBananas += this.bps / 10;
+
+                this.unlockAchievements();
+            }, 100)
+        },
         startBPSFromClicks() {
             this.BPSFromClicksInterval = setInterval(() => {
                 const clickRate = this.nbClicksClickrate;
                 this.nbClicksClickrate = 0;
-                // Call your function to calculate BPS and update the display
+
                 this.bpsFromClicks = this.bpc * clickRate;
             }, 1000);
         },
@@ -414,20 +446,12 @@ export default defineComponent({
             });
 
             this.achievements.forEach(achievement => {
-                if (achievement.unlocked === true) {
-                    bps += achievement.bonus;
+                if (achievement.unlocked === true && achievement.bonus.type === 'bps') {
+                    bps += achievement.bonus.value;
                 }
             });
 
             return bps;
-        },
-        startBPS() {
-            this.bpsInterval = setInterval(() => {
-                this.bananas += this.bps / 10;
-                this.totalBananas += this.bps / 10;
-
-                this.unlockAchievements();
-            }, 100)
         },
         buyModule(module, type, index) {
             let currentPrice = Math.floor(module.price.base * (Math.pow(module.price.multiplier, module.numberBought + 1) - 1) / (module.price.multiplier - 1));
@@ -489,6 +513,12 @@ export default defineComponent({
 
                 if (achievement.conditionType === 'bpc' && this.bpc >= achievement.condition) {
                     achievement.unlocked = true;
+
+                    if (achievement.bonus.applied === false) {
+                        this.bpc += achievement.bonus;
+                        // TODO: sauvegarder ça
+                        achievement.bonus.applied = true;
+                    }
                 }
             });
         },
