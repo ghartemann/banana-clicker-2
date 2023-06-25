@@ -134,11 +134,11 @@ import {defineComponent} from 'vue';
 import ModuleButton from "./components/module-button";
 import {useAnimateCss} from "../../../../composables/animateCssComposable";
 import {useReturnNicerNumber} from "../../../../composables/numbersComposable";
-import Shop from "@pages/game/components/clique/components/shop.vue";
+// import Shop from "@pages/game/components/clique/components/shop.vue";
 
 export default defineComponent({
     name: "clique",
-    components: {Shop, ModuleButton},
+    components: {ModuleButton},
     data() {
         return {
             bananas: 0,
@@ -400,7 +400,7 @@ export default defineComponent({
     created() {
         this.load();
 
-        // this.startBPS();
+        this.startBPS();
         this.startBPSFromClicks();
         this.startAutomaticSaving();
     },
