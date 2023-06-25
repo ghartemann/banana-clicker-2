@@ -24,7 +24,7 @@
                     <div>
                         <div class="tw-font-bold">{{ achievement.name }}</div>
                         <div>{{ achievement.description }}</div>
-                        <div>Bonus : {{ achievement.bonusText }}</div>
+                        <div>Bonus : {{ achievement.bonus.text }}</div>
                     </div>
                 </v-tooltip>
             </div>

@@ -7,6 +7,8 @@ import './bootstrap';
 import { createApp } from 'vue';
 import App from '@pages/App.vue';
 
+import { createPinia } from 'pinia';
+
 import axios from 'axios';
 import VueAxios from 'vue-axios';
 
@@ -19,7 +21,9 @@ import * as directives from 'vuetify/directives';
 import { aliases, mdi } from 'vuetify/iconsets/mdi'
 import '@mdi/font/css/materialdesignicons.css';
 
-const vuetify = createVuetify({
+const pinia = createPinia();
+
+const vuetify= createVuetify({
     components,
     directives,
     icons: {
@@ -32,6 +36,7 @@ const vuetify = createVuetify({
 });
 
 createApp(App)
+    .use(pinia)
     .use(router)
     .use(vuetify)
     .use(VueAxios, axios)

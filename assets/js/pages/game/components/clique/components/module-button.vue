@@ -63,7 +63,7 @@
         <div class="tw-text-green-darker tw-flex tw-flex-col tw-gap-2">
             <div>{{ module.description }}</div>
 
-            <div v-if="type === 'bps'">Chaque {{ module.name }} produit {{ useReturnNicerNumber(module.bps.current) }} bananes par seconde.</div>
+            <div v-if="type === 'bps'">Chaque {{ module.name }} produit {{ useReturnNicerNumber(module.bps.current) }} banane{{ module.bps.current <= 1 ? '' : 's' }} par seconde.</div>
 
             <div>
                 <div>
