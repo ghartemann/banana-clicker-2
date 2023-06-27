@@ -28,6 +28,11 @@ Encore
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
 
+    .configureDefinePlugin(options => {
+        options.__VUE_OPTIONS_API__ = true;
+        options.__VUE_PROD_DEVTOOLS__ = false;
+    })
+
     // will require an extra script tag for runtime.js
     // but, you probably want this, unless you're building a single-page app
     .enableSingleRuntimeChunk()

@@ -31,6 +31,14 @@
                      style="--animate-duration: 0.2s;">
             </button>
 
+            <div id="warped">
+                <div v-for="i in 18">
+                    <span :id="'w' + i" :class="'w' + i">
+                        <img src="/assets/images/modules/bpc/clicker.png" :id="'w' + i + 'pic'" class="normalCursor">
+                    </span>
+                </div>
+            </div>
+
             <div class="tw-w-full tw-flex tw-flex-col tw-gap-5 tw-items-center">
                 <div class="tw-text-white">
                     <div class="tw-font-bold tw-text-6xl tw-text-white">
