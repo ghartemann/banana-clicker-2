@@ -24,20 +24,20 @@
         </div>
 
         <div class="tw-col-span-1 tw-flex tw-flex-col tw-items-center tw-text-center">
-            <button class="tw-rounded-full tw-w-fit tw-p-8 tw-shadow tw-m-5" id="content" @click="clickBanana">
+            <button class="tw-rounded-full tw-w-fit tw-p-8 tw-shadow tw-m-5 tw-relative" id="content" @click="clickBanana">
                 <img ref="banane"
                      src="/assets/images/banane.png" alt="Banana"
                      class="tw-w-36 tw-h-36 animate__faster"
                      style="--animate-duration: 0.2s;">
-            </button>
 
-            <div id="warped">
-                <div v-for="i in 18">
+                <div id="warped" class="tw-absolute">
+                    <div v-for="i in 18">
                     <span :id="'w' + i" :class="'w' + i">
-                        <img src="/assets/images/modules/bpc/clicker.png" :id="'w' + i + 'pic'" class="normalCursor">
+                        <img src="/assets/images/modules/bpc/clicker.png" :id="'w' + i + 'pic'" :class="cursorClicking === true ? 'tw-w-7' : 'tw-w-8'" alt="un curseur">
                     </span>
+                    </div>
                 </div>
-            </div>
+            </button>
 
             <div class="tw-w-full tw-flex tw-flex-col tw-gap-5 tw-items-center">
                 <div class="tw-text-white">
@@ -159,6 +159,7 @@ export default defineComponent({
             BPSFromClicksInterval: null,
             nbClicksClickrate: 0,
             bpsFromClicks: 0,
+            cursorClicking: false,
             bpsModules: [
                 {
                     name: 'Auto Clicker',
@@ -411,6 +412,8 @@ export default defineComponent({
         this.startBPS();
         this.startBPSFromClicks();
         this.startAutomaticSaving();
+
+        this.animateClicker();
     },
     methods: {
         useAnimateCss,
@@ -444,6 +447,15 @@ export default defineComponent({
                 this.nbClicksClickrate = 0;
 
                 this.bpsFromClicks = this.bpc * clickRate;
+            }, 1000);
+        },
+        animateClicker() {
+            setInterval(() => {
+                this.cursorClicking = !this.cursorClicking;
+
+                setTimeout(() => {
+                    this.cursorClicking = !this.cursorClicking;
+                }, 200);
             }, 1000);
         },
         calcBPS() {
