@@ -30,13 +30,13 @@
                      class="tw-w-36 tw-h-36 animate__faster"
                      style="--animate-duration: 0.2s;">
 
-                <div id="warped" class="tw-absolute">
-                    <div v-for="i in 18">
-                    <span :id="'w' + i" :class="'w' + i">
-                        <img src="/assets/images/modules/bpc/clicker.png" :id="'w' + i + 'pic'" :class="cursorClicking === true ? 'tw-w-7' : 'tw-w-8'" alt="un curseur">
-                    </span>
-                    </div>
-                </div>
+<!--                <div id="warped" class="tw-absolute">-->
+<!--                    <div v-for="i in 18">-->
+<!--                    <span :id="'w' + i" :class="'w' + i">-->
+<!--                        <img src="/assets/images/modules/bpc/clicker.png" :id="'w' + i + 'pic'" :class="cursorClicking === true ? 'tw-w-7' : 'tw-w-8'" alt="un curseur">-->
+<!--                    </span>-->
+<!--                    </div>-->
+<!--                </div>-->
             </button>
 
             <div class="tw-w-full tw-flex tw-flex-col tw-gap-5 tw-items-center">
