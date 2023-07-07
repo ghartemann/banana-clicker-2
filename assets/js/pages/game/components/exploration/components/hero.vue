@@ -2,7 +2,7 @@
     <div class="tw-flex-col tw-flex tw-items-center">
         <div class="tw-font-bold">{{ heroName }}</div>
         <div>{{ hero.life.current }} / {{ hero.life.max }}</div>
-        <v-progress-linear :model-value="hero.life.current"></v-progress-linear>
+        <v-progress-linear :model-value="hero.life.current" :bg-color="lifeBarColor" :color="lifeBarColor" rounded height="10"></v-progress-linear>
 
         <img src="/assets/images/exploration/hero.png"
              alt="Hero"
@@ -30,6 +30,17 @@ export default defineComponent({
         heroName: {
             type: String,
             required: true
+        }
+    },
+    computed: {
+        lifeBarColor() {
+            if (this.hero.life.current > this.hero.life.max / 3) {
+                return 'success';
+            } else if (this.hero.life.current > this.hero.life.max / 10) {
+                return 'warning';
+            } else {
+                return 'error';
+            }
         }
     }
 })

@@ -1,18 +1,18 @@
 <template>
     <div>
-        <WelcomeToTheArena @start="startGame($event)" v-if="gameStarted === false"></WelcomeToTheArena>
+        <WelcomeToTheArena v-if="gameStarted === false" @start="startGame($event)" ></WelcomeToTheArena>
 
-        <Battleground v-else :heroName="heroName"></Battleground>
+        <Battleground v-if="gameStarted === true" :heroName="heroName" @log-event="logs = $event"></Battleground>
 
-        <BattleLog :logs="logs"></BattleLog>
+        <BattleLog v-if="gameStarted === true" :logs="logs"></BattleLog>
     </div>
 </template>
 
 <script>
 import {defineComponent} from 'vue';
 import Battleground from "@pages/game/components/exploration/components/battleground";
-import WelcomeToTheArena from "@pages/game/components/exploration/components/WelcomeToTheArena.vue";
-import BattleLog from "@pages/game/components/exploration/components/BattleLog.vue";
+import WelcomeToTheArena from "@pages/game/components/exploration/components/WelcomeToTheArena";
+import BattleLog from "@pages/game/components/exploration/components/BattleLog";
 
 export default defineComponent({
     name: "exploration",

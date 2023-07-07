@@ -2,7 +2,7 @@
     <div class="tw-flex-col tw-flex tw-items-center">
         <div class="tw-font-bold">{{ enemy.name }}</div>
         <div>{{ enemy.life.current }} / {{ enemy.life.max }}</div>
-        <v-progress-linear :model-value="enemy.life.current"></v-progress-linear>
+        <v-progress-linear :model-value="enemy.life.current" bg-color="error" color="error" rounded height="10"></v-progress-linear>
 
         <img :src="'/assets/images/exploration/' + enemy.picture"
              :alt="enemy.name"

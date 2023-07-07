@@ -33,7 +33,7 @@ export default defineComponent({
     data: () => {
         return {
             hero: {
-                name: this.heroName,
+                name: '',
                 life: {
                     current: 100,
                     max: 100
@@ -64,6 +64,8 @@ export default defineComponent({
         setTimeout(() => {
             this.startEnemyAttack();
         }, 1000);
+
+        this.hero.name = this.heroName;
     },
     methods: {
         useAnimateCss,
@@ -109,12 +111,18 @@ export default defineComponent({
             const log = {
                 attacker: attacker.name,
                 defender: defender.name,
-                damage: attacker.attack - defender.defense
+                damage: attacker.attack - defender.defense,
+                niceGuy: attacker.name === this.hero.name
             };
 
-            this.logs.push(log);
+            this.logs.unshift(log);
 
-            this.$emit('log', this.logs);
+            this.$emit('log-event', this.logs);
+        }
+    },
+    watch: {
+        heroName() {
+            this.hero.name = this.heroName;
         }
     }
 })

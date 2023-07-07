@@ -36,7 +36,7 @@
             </div>
 
             <div v-else>
-                <v-text-field label="Choisissez le nom de votre personnage (c'est parfaitement inutile)" v-model="heroName"></v-text-field>
+                <v-text-field label="Choisissez le nom de votre personnage (c'est parfaitement inutile)" v-model="heroName" variant="outlined" rounded></v-text-field>
 
                 <button @click="$emit('start', heroName)">Commencer (mais cette fois pour de vrai)</button>
             </div>
