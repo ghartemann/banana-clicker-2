@@ -1,8 +1,21 @@
 <template>
-    <div class="tw-flex-col tw-flex tw-items-center">
-        <div class="tw-font-bold">{{ heroName }}</div>
-        <div>{{ hero.life.current }} / {{ hero.life.max }}</div>
-        <v-progress-linear :model-value="hero.life.current" :bg-color="lifeBarColor" :color="lifeBarColor" rounded height="10"></v-progress-linear>
+    <div class="tw-flex-col-reverse tw-flex tw-items-center">
+        <div class="tw-font-bold">
+            {{ heroName }}
+        </div>
+
+        <div>
+            {{ hero.life.current }} / {{ hero.life.max }}
+        </div>
+
+        <v-progress-linear
+            :model-value="hero.life.current"
+            :max="hero.life.max"
+            :bg-color="lifeBarColor"
+            :color="lifeBarColor"
+            rounded
+            height="10">
+        </v-progress-linear>
 
         <img src="/assets/images/exploration/hero.png"
              alt="Hero"
@@ -10,10 +23,6 @@
              id="hero"
              style="--animate-duration: 0.2s;"
         >
-
-        <div>PV max : {{ hero.life.max }}</div>
-        <div>ATK : {{ hero.attack }}</div>
-        <div>DEF : {{ hero.defense }}</div>
     </div>
 </template>
 

@@ -1,10 +1,12 @@
 <template>
     <div>
-        <WelcomeToTheArena v-if="gameStarted === false" @start="startGame($event)" ></WelcomeToTheArena>
+        <WelcomeToTheArena v-if="gameStarted === false" @start="startGame($event)"></WelcomeToTheArena>
 
-        <Battleground v-if="gameStarted === true" :heroName="heroName" @log-event="logs = $event"></Battleground>
+        <div v-if="gameStarted === true" class="tw-w-4/5">
+            <Battleground :heroName="heroName" @log-event="logs = $event"></Battleground>
 
-        <BattleLog v-if="gameStarted === true" :logs="logs"></BattleLog>
+            <BattleLog :logs="logs" class="tw-w-full"></BattleLog>
+        </div>
     </div>
 </template>
 
