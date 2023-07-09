@@ -19,7 +19,7 @@
 
         <img src="/assets/images/exploration/hero.png"
              alt="Hero"
-             class="tw-w-20 tw-h-20 tw-mx-auto tw-mb-5"
+             class="tw-w-20 tw-h-20 tw-mx-auto tw-mb-5 healing"
              id="hero"
              style="--animate-duration: 0.2s;"
         >
@@ -56,5 +56,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-
+.healing {
+    filter: drop-shadow(0px 0px 30px #2EE921);
+}
 </style>
