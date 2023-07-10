@@ -1,6 +1,6 @@
 <template>
     <div class="tw-flex-col-reverse tw-flex tw-items-center">
-        <div class="tw-font-bold">
+        <div class="tw-font-bold tw-h-12">
             {{ heroName }}
         </div>
 

@@ -40,7 +40,7 @@
 
                 <v-text-field label="Choisissez le nom de votre personnage (c'est parfaitement inutile)" v-model="heroName" variant="outlined" rounded></v-text-field>
 
-                <v-btn @click="$emit('start', heroName)" rounded elevation="0" color="#27ae60" class="tw-text-white" :disabled="heroName === null">
+                <v-btn @click="$emit('start')" rounded elevation="0" color="#27ae60" class="tw-text-white" :disabled="heroName === null">
                     Commencer (mais cette fois pour de vrai)
                 </v-btn>
             </div>
@@ -57,6 +57,11 @@ export default defineComponent({
         step: 1,
         heroName: null
     }),
+    watch: {
+        heroName() {
+            this.$emit('heroName', this.heroName);
+        }
+    }
 })
 </script>
 

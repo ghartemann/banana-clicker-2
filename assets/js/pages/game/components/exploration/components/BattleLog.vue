@@ -1,10 +1,11 @@
 <template>
-    <div class="tw-bg-white tw-bg-opacity-20 tw-rounded-2xl tw-p-5 tw-text-white tw-w-full">
+    <div class="tw-bg-white tw-bg-opacity-50 tw-rounded-2xl tw-p-5 tw-text-white tw-w-full">
         <div>BattleLog</div>
 
-        <div class="tw-h-72 tw-overflow-scroll">
-            <div v-for="(log, index) in logs" :key="index">
-                <div v-if="log.type === 'dmg'">
+        <div class="tw-h-72" style="mask-image: linear-gradient(rgba(255, 255, 255, 1), transparent);">
+            <div v-for="(log, index) in logs">
+                <div v-if="log.type === 'dmg'" :class="index === 0 ? 'test' : ''">
+                {{index}}
                     <span :class="log.niceGuy ? 'tw-text-green-dark' : 'tw-text-red-700'">{{ log.attacker }}</span>
                     attaque <span :class="log.niceGuy? 'tw-text-red-700':'tw-text-green-dark'">{{ log.defender }}</span>
                     et lui inflige <span class="tw-text-yellow-dark">{{ log.damage }}</span> points de dégats.
@@ -40,5 +41,18 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.test {
+    animation: typing 0.5s steps(40);
+    overflow: hidden;
+    white-space: nowrap;
+}
 
+@keyframes typing {
+    from {
+        width: 0
+    }
+    to {
+        width: 100%
+    }
+}
 </style>

@@ -1,9 +1,9 @@
 <template>
     <div>
-        <WelcomeToTheArena v-if="gameStarted === false" @start="startGame($event)"></WelcomeToTheArena>
+        <WelcomeToTheArena v-if="gameStarted === false" @start="gameStarted = true" @hero-name="heroName = $event"></WelcomeToTheArena>
 
         <div v-if="gameStarted === true" class="tw-flex tw-flex-col tw-gap-3">
-            <Battleground :heroName="heroName" @log-event="logs = $event" class="tw-h-96"></Battleground>
+            <Battleground :hero-name="heroName" @log-event="logs = $event" class="tw-h-96"></Battleground>
 
             <div class="tw-grid tw-grid-cols-4 tw-w-full">
                 <BattleLog :logs="logs" class="tw-col-span-2"></BattleLog>
@@ -26,12 +26,6 @@ export default defineComponent({
             gameStarted: false,
             heroName: null,
             logs: []
-        }
-    },
-    methods: {
-        startGame(heroName) {
-            this.gameStarted = true;
-            this.heroName = heroName;
         }
     }
 })

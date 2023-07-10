@@ -1,6 +1,6 @@
 <template>
     <div class="tw-grid tw-grid-cols-4 tw-gap-3">
-        <div class="tw-col-span-1 tw-rounded-2xl tw-p-5 tw-bg-cover" style="background: url('/assets/images/exploration/parchment.jpg');">
+        <div class="tw-col-span-1 tw-rounded-2xl tw-p-5 tw-bg-cover tw-shadow-xl" style="background: url('/assets/images/exploration/parchment.jpg');">
             <h2 class="tw-text-2xl tw-font-bold tw-text-center tw-mb-5 tw-text">{{ hero.name }}</h2>
 
             <div>
@@ -40,14 +40,16 @@
         </div>
 
         <div class="tw-col-span-2 tw-w-full tw-rounded-2xl tw-flex tw-justify-center">
-            <div class="tw-text-white tw-p-10 !tw-bg-cover tw-bg-center tw-rounded-2xl tw-shadow-2xl tw-w-full tw-relative" style="background: url('/assets/images/exploration/arena.jpg');">
+            <div class="tw-text-white tw-p-10 !tw-bg-center !tw-bg-cover tw-rounded-2xl tw-shadow-2xl tw-w-full tw-relative" style="background: url('/assets/images/exploration/arena.jpg'); ">
                 <div v-if="hero.life.current > 0" class="tw-flex tw-flex-col tw-items-center ">
                     <div class="tw-grid tw-grid-cols-12 tw-pt-16">
-                        <Hero :hero="hero" :hero-name="heroName" class="tw-col-span-3"></Hero>
+                        <Hero :hero="hero" :hero-name="heroName" class="tw-col-span-3 tw-flex tw-justify-center"></Hero>
 
-                        <img src="/assets/images/exploration/epees.png" alt="épées" class="tw-col-span-6 tw-w-20 tw-h-20 tw-mx-auto tw-mb-5">
+                        <div class="tw-col-span-6 tw-flex tw-justify-center">
+                            <img src="/assets/images/exploration/epees.png" alt="épées" class="tw-w-20 tw-h-20 tw-mb-5">
+                        </div>
 
-                        <Enemy :enemy="monsters[monsterIndex]" class="tw-col-span-3"></Enemy>
+                        <Enemy :enemy="monsters[zoneIndex][monsterIndex]" class="tw-col-span-3 tw-flex tw-justify-center"></Enemy>
                     </div>
 
                     <div class="tw-w-1/3 tw-border-2 tw-border-white tw-rounded-lg tw-p-1 tw-absolute tw-bottom-3">
@@ -66,12 +68,14 @@
             </div>
         </div>
 
-        <div class="tw-col-span-1 tw-rounded-2xl tw-p-5 tw-bg-cover" style="background: url('/assets/images/exploration/parchment.jpg');">
-            <h2 class="tw-text-2xl tw-font-bold tw-text-center tw-mb-5 tw-text">{{ monsters[monsterIndex].name }}</h2>
+        <div class="tw-col-span-1 tw-rounded-2xl tw-p-5 tw-bg-cover tw-shadow-2xl" style="background: url('/assets/images/exploration/parchment.jpg');">
+            <h2 class="tw-text-2xl tw-font-bold tw-text-center tw-mb-5 tw-text">
+                {{ monsters[zoneIndex][monsterIndex].name }}
+            </h2>
 
-            <div>PV max : {{ monsters[monsterIndex].life.max }}</div>
-            <div>DMG : {{ monsters[monsterIndex].attack }}</div>
-            <div>DEF : {{ monsters[monsterIndex].defense }}</div>
+            <div>PV max : {{ monsters[zoneIndex][monsterIndex].life.max }}</div>
+            <div>DMG : {{ monsters[zoneIndex][monsterIndex].attack }}</div>
+            <div>DEF : {{ monsters[zoneIndex][monsterIndex].defense }}</div>
         </div>
     </div>
 </template>
@@ -109,8 +113,8 @@ export default defineComponent({
                     level: 1
                 }
             },
-            monsters: {
-                'zone1': [
+            monsters: [
+                [
                     {
                         name: 'Singe agressif',
                         picture: 'singe-agressif.png',
@@ -134,7 +138,7 @@ export default defineComponent({
                         xp: 15
                     }
                 ]
-            },
+            ],
             powers: {
                 heal: {
                     action: 'heal',
@@ -151,13 +155,14 @@ export default defineComponent({
                 heal: 0
             },
             monsterIndex: 0,
+            zoneIndex: 0,
             battleTimeout: null,
             heroAttackInterval: null,
             enemyAttackInterval: null,
             logs: []
         }
     },
-    created() {
+    mounted() {
         this.startBattle();
 
         this.hero.name = this.heroName;
@@ -177,24 +182,24 @@ export default defineComponent({
 
                 const nextDamage = Math.random() < this.hero.crit ? this.hero.attack * 2 : this.hero.attack;
 
-                this.monsters[this.monsterIndex].life.current -= nextDamage - this.monsters[this.monsterIndex].defense;
+                this.monsters[this.zoneIndex][this.monsterIndex].life.current -= nextDamage - this.monsters[this.zoneIndex][this.monsterIndex].defense;
 
-                this.logEvent(nextDamage === this.hero.attack ? 'dmg' : 'crit', this.hero, this.monsters[this.monsterIndex]);
+                this.logEvent(nextDamage === this.hero.attack ? 'dmg' : 'crit', this.hero, this.monsters[this.zoneIndex][this.monsterIndex]);
 
-                if (this.monsters[this.monsterIndex].life.current <= 0) {
+                if (this.monsters[this.zoneIndex][this.monsterIndex].life.current <= 0) {
                     clearInterval(this.heroAttackInterval);
                     clearInterval(this.enemyAttackInterval);
 
-                    this.logEvent('kill', this.hero, this.monsters[this.monsterIndex]);
+                    this.logEvent('kill', this.hero, this.monsters[this.zoneIndex][this.monsterIndex]);
 
-                    this.hero.xp.current += this.monsters[this.monsterIndex].xp;
+                    this.hero.xp.current += this.monsters[this.zoneIndex][this.monsterIndex].xp;
 
-                    if (this.monsterIndex < this.monsters.length - 1) {
+                    if (this.monsterIndex < this.monsters[this.zoneIndex].length - 1) {
                         this.monsterIndex++;
                     } else {
                         this.monsterIndex = 0;
 
-                        this.monsters.forEach(monster => {
+                        this.monsters[this.zoneIndex].forEach(monster => {
                             monster.life.current = monster.life.max;
                         });
                     }
@@ -207,16 +212,16 @@ export default defineComponent({
             this.enemyAttackInterval = setInterval(() => {
                 this.useAnimateCss(document.getElementById('hero'), 'wobble');
 
-                this.hero.life.current -= this.monsters[this.monsterIndex].attack - this.hero.defense;
+                this.hero.life.current -= this.monsters[this.zoneIndex][this.monsterIndex].attack - this.hero.defense;
 
-                this.logEvent('dmg', this.monsters[this.monsterIndex], this.hero);
+                this.logEvent('dmg', this.monsters[this.zoneIndex][this.monsterIndex], this.hero);
 
                 if (this.hero.life.current <= 0) {
                     clearInterval(this.heroAttackInterval);
                     clearInterval(this.enemyAttackInterval);
                     clearInterval(this.battleTimeout);
 
-                    this.logEvent('kill', this.monsters[this.monsterIndex], this.hero);
+                    this.logEvent('kill', this.monsters[this.zoneIndex][this.monsterIndex], this.hero);
                 }
             }, 2000);
         },
@@ -230,6 +235,10 @@ export default defineComponent({
             };
 
             this.logs.unshift(log);
+
+            if (this.logs.length > 12) {
+                this.logs.pop();
+            }
 
             this.$emit('log-event', this.logs);
         },
@@ -251,9 +260,6 @@ export default defineComponent({
         }
     },
     watch: {
-        heroName() {
-            this.hero.name = this.heroName;
-        },
         monsterIndex() {
             if (this.monsterIndex === 9) {
                 // Boss fight
