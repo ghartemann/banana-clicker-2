@@ -1,6 +1,6 @@
 <template>
     <div class="tw-grid tw-grid-cols-4 tw-gap-3">
-        <div class="tw-col-span-1 tw-rounded-2xl tw-p-5 tw-bg-cover tw-shadow-xl" style="background: url('/assets/images/exploration/parchment.jpg');">
+        <div class="tw-col-span-1 tw-rounded-2xl tw-bg-white tw-p-5 tw-bg-cover tw-shadow-xl">
             <h2 class="tw-text-2xl tw-font-bold tw-text-center tw-mb-5 tw-text">{{ hero.name }}</h2>
 
             <div>
@@ -19,37 +19,58 @@
             </div>
 
             <div class="tw-flex tw-justify-between">
-                <div>PV max</div>
+                <div class="tw-flex tw-gap-1">
+                    <div>PV max</div>
+
+                    <button v-if="hero.xp.points > 0" rounded @click="addPoint('pv')">+</button>
+                </div>
+
                 <div>{{ hero.life.max }}</div>
             </div>
 
             <div class="tw-flex tw-justify-between">
-                <div>DMG</div>
+                <div class="tw-flex tw-gap-1">
+                    <div>DMG</div>
+
+                    <button v-if="hero.xp.points > 0" rounded @click="addPoint('dmg')">+</button>
+                </div>
+
                 <div>{{ hero.attack }}</div>
             </div>
 
             <div class="tw-flex tw-justify-between">
-                <div>DEF</div>
+                <div class="tw-flex tw-gap-1">
+                    <div>DEF</div>
+
+                    <button v-if="hero.xp.points > 0" rounded @click="addPoint('def')">+</button>
+                </div>
+
                 <div>{{ hero.defense }}</div>
             </div>
 
             <div class="tw-flex tw-justify-between">
-                <div>Chances de DMG crit.</div>
+                <div class="tw-flex tw-gap-1">
+                    <div>Chances de DMG crit.</div>
+                    <button v-if="hero.xp.points > 0" rounded @click="addPoint('crit')">+</button>
+                </div>
+
                 <div>{{ hero.crit * 100 }}%</div>
+            </div>
+
+            <div v-if="hero.xp.points > 0" class="tw-flex tw-justify-between">
+                <div>Points de compétence</div>
+
+                <div>{{ hero.xp.points }}</div>
             </div>
         </div>
 
         <div class="tw-col-span-2 tw-w-full tw-rounded-2xl tw-flex tw-justify-center">
-            <div class="tw-text-white tw-p-10 !tw-bg-center !tw-bg-cover tw-rounded-2xl tw-shadow-2xl tw-w-full tw-relative" style="background: url('/assets/images/exploration/arena.jpg'); ">
+            <div class="tw-text-white tw-p-10 !tw-bg-center !tw-bg-cover tw-rounded-2xl tw-shadow-2xl tw-w-full tw-relative" style="background: url('/assets/images/exploration/levels/arena.jpg'); ">
                 <div v-if="hero.life.current > 0" class="tw-flex tw-flex-col tw-items-center ">
                     <div class="tw-grid tw-grid-cols-12 tw-pt-16">
                         <Hero :hero="hero" :hero-name="heroName" class="tw-col-span-3 tw-flex tw-justify-center"></Hero>
 
-                        <div class="tw-col-span-6 tw-flex tw-justify-center">
-                            <img src="/assets/images/exploration/epees.png" alt="épées" class="tw-w-20 tw-h-20 tw-mb-5">
-                        </div>
-
-                        <Enemy :enemy="monsters[zoneIndex][monsterIndex]" class="tw-col-span-3 tw-flex tw-justify-center"></Enemy>
+                        <Enemy :enemy="monsters[zoneIndex][monsterIndex]" class="tw-col-span-3 tw-col-start-10 tw-flex tw-justify-center"></Enemy>
                     </div>
 
                     <div class="tw-w-1/3 tw-border-2 tw-border-white tw-rounded-lg tw-p-1 tw-absolute tw-bottom-3">
@@ -60,7 +81,7 @@
                 </div>
 
                 <div v-else class="tw-w-full tw-h-full tw-flex tw-justify-center tw-items-center">
-                    <div class="tw-bg-white tw-p-5 tw-rounded-2xl tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-2">
+                    <div class="tw-bg-white tw-p-5 tw-rounded-2xl tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-2 tw-shadow-2xl">
                         <div class="tw-text-red-600 tw-text-5xl">VOUS ÊTES MORT·E</div>
                         <v-btn rounded elevation="0" color="red">Recommencer</v-btn>
                     </div>
@@ -68,7 +89,7 @@
             </div>
         </div>
 
-        <div class="tw-col-span-1 tw-rounded-2xl tw-p-5 tw-bg-cover tw-shadow-2xl" style="background: url('/assets/images/exploration/parchment.jpg');">
+        <div class="tw-col-span-1 tw-rounded-2xl tw-bg-white tw-p-5 tw-bg-cover tw-shadow-2xl">
             <h2 class="tw-text-2xl tw-font-bold tw-text-center tw-mb-5 tw-text">
                 {{ monsters[zoneIndex][monsterIndex].name }}
             </h2>
@@ -105,37 +126,38 @@ export default defineComponent({
                     max: 20
                 },
                 attack: 1,
-                crit: 0.04,
+                crit: 0.03,
                 defense: 0,
                 xp: {
-                    current: 15,
+                    current: 0,
                     max: 100,
-                    level: 1
+                    level: 1,
+                    points: 0
                 }
             },
             monsters: [
                 [
                     {
                         name: 'Singe agressif',
-                        picture: 'singe-agressif.png',
+                        picture: 'singe.png',
                         life: {
                             current: 10,
                             max: 10
                         },
                         attack: 1,
                         defense: 0,
-                        xp: 10
+                        xp: 5
                     },
                     {
                         name: 'Tapir sanguinaire',
-                        picture: 'tapir-sanguinaire.png',
+                        picture: 'tapir.png',
                         life: {
                             current: 15,
                             max: 15
                         },
                         attack: 1,
                         defense: 0,
-                        xp: 15
+                        xp: 10
                     }
                 ]
             ],
@@ -189,13 +211,15 @@ export default defineComponent({
                 if (this.monsters[this.zoneIndex][this.monsterIndex].life.current <= 0) {
                     clearInterval(this.heroAttackInterval);
                     clearInterval(this.enemyAttackInterval);
+                    clearInterval(this.battleTimeout);
 
                     this.logEvent('kill', this.hero, this.monsters[this.zoneIndex][this.monsterIndex]);
 
                     this.hero.xp.current += this.monsters[this.zoneIndex][this.monsterIndex].xp;
 
                     if (this.monsterIndex < this.monsters[this.zoneIndex].length - 1) {
-                        this.monsterIndex++;
+                        this.monsters[this.zoneIndex][this.monsterIndex].life.current = this.monsters[this.zoneIndex][this.monsterIndex].life.max;
+                        this.monsterIndex = Math.floor(Math.random() * (this.monsters[this.zoneIndex].length));
                     } else {
                         this.monsterIndex = 0;
 
@@ -257,17 +281,42 @@ export default defineComponent({
 
                     break;
             }
+        },
+        lvlUp() {
+            this.hero.xp.current -= this.hero.xp.max;
+            this.hero.xp.max = Math.floor(this.hero.xp.max * 1.5);
+            this.hero.xp.level++;
+            this.hero.life.current = this.hero.life.max;
+            this.hero.xp.points += 2;
+        },
+        addPoint(type) {
+            this.hero.xp.points--;
+
+            switch (type) {
+                case 'pv':
+                    this.hero.life.max += 5;
+                    this.hero.life.current += Math.min(this.hero.life.current + 5, this.hero.life.max);
+                    break;
+                case 'dmg':
+                    this.hero.attack += 1;
+                    break;
+                case 'def':
+                    this.hero.defense += 1;
+                    break;
+                case 'crit':
+                    this.hero.crit += 0.001;
+                    break;
+            }
         }
     },
     watch: {
-        monsterIndex() {
-            if (this.monsterIndex === 9) {
-                // Boss fight
-            }
-
-            if (this.monsterIndex === 10) {
-                // Zone 2
-            }
+        hero: {
+            handler() {
+                if (this.hero.xp.current >= this.hero.xp.max) {
+                    this.lvlUp();
+                }
+            },
+            deep: true
         }
     }
 })

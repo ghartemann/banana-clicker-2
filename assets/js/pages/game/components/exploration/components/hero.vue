@@ -1,11 +1,7 @@
 <template>
-    <div class="tw-flex-col-reverse tw-flex tw-items-center">
+    <div class="tw-flex-col tw-flex tw-items-center">
         <div class="tw-font-bold tw-h-12">
             {{ heroName }}
-        </div>
-
-        <div>
-            {{ hero.life.current }} / {{ hero.life.max }}
         </div>
 
         <v-progress-linear
@@ -14,7 +10,10 @@
             :bg-color="lifeBarColor"
             :color="lifeBarColor"
             rounded
-            height="10">
+            height="20">
+            <span class="tw-text-black">
+                {{ hero.life.current }} / {{ hero.life.max }}
+            </span>
         </v-progress-linear>
 
         <img src="/assets/images/exploration/hero.png"
