@@ -18,6 +18,7 @@
             <div>Ivan Mogilevchik</div>
             <div>Adobe</div>
             <div>Freepik</div>
+            <div>Flaticon</div>
             <div>Unsplash</div>
         </div>
     </div>

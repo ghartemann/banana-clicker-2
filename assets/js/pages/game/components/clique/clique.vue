@@ -548,7 +548,7 @@ export default defineComponent({
             }, 5000)
         },
         save() {
-            let saveFile = {
+            const clickerSaveFile = {
                 bananas: this.bananas,
                 totalBananas: this.totalBananas,
                 bps: this.bps,
@@ -556,28 +556,28 @@ export default defineComponent({
                 nbClicks: this.nbClicks
             };
 
-            saveFile.bpsModules = this.bpsModules.map(module => {
+            clickerSaveFile.bpsModules = this.bpsModules.map(module => {
                 return {
                     slug: module.slug,
                     numberBought: module.numberBought
                 }
             });
 
-            saveFile.bpcModules = this.bpcModules.map(module => {
+            clickerSaveFile.bpcModules = this.bpcModules.map(module => {
                 return {
                     slug: module.slug,
                     numberBought: module.numberBought
                 }
             });
 
-            saveFile.bpsBuffsModules = this.bpsBuffsModules.map(module => {
+            clickerSaveFile.bpsBuffsModules = this.bpsBuffsModules.map(module => {
                 return {
                     slug: module.slug,
                     numberBought: module.numberBought
                 }
             });
 
-            saveFile.achievements = this.achievements.map(achievement => {
+            clickerSaveFile.achievements = this.achievements.map(achievement => {
                 return {
                     name: achievement.name,
                     unlocked: achievement.unlocked,
@@ -585,23 +585,23 @@ export default defineComponent({
                 }
             });
 
-            localStorage.setItem('saveFile', btoa(btoa(JSON.stringify(saveFile))));
+            localStorage.setItem('clickerSaveFile', btoa(btoa(JSON.stringify(clickerSaveFile))));
         },
         load() {
-            let saveFile = localStorage.getItem('saveFile');
+            const rawClickerSaveFile = localStorage.getItem('clickerSaveFile');
 
-            if (saveFile !== null) {
-                saveFile = JSON.parse(atob(atob(saveFile)));
+            if (rawClickerSaveFile !== null) {
+                const clickerSaveFile = JSON.parse(atob(atob(rawClickerSaveFile)));
 
-                this.bananas = saveFile.bananas;
-                this.totalBananas = saveFile.totalBananas;
-                this.bps = saveFile.bps;
-                this.bpc = saveFile.bpc;
-                this.nbClicks = saveFile.nbClicks;
+                this.bananas = clickerSaveFile.bananas;
+                this.totalBananas = clickerSaveFile.totalBananas;
+                this.bps = clickerSaveFile.bps;
+                this.bpc = clickerSaveFile.bpc;
+                this.nbClicks = clickerSaveFile.nbClicks;
 
                 this.bpsModules.forEach((module, index) => {
-                    if (saveFile.bpsModules) {
-                        let saveModule = saveFile.bpsModules.find(saveModule => saveModule.slug === module.slug);
+                    if (clickerSaveFile.bpsModules) {
+                        const saveModule = clickerSaveFile.bpsModules.find(saveModule => saveModule.slug === module.slug);
 
                         if (saveModule !== undefined) {
                             module.numberBought = saveModule.numberBought;
@@ -614,8 +614,8 @@ export default defineComponent({
                 });
 
                 this.bpcModules.forEach((module, index) => {
-                    if (saveFile.bpcModules) {
-                        let saveModule = saveFile.bpcModules.find(saveModule => saveModule.slug === module.slug);
+                    if (clickerSaveFile.bpcModules) {
+                        const saveModule = clickerSaveFile.bpcModules.find(saveModule => saveModule.slug === module.slug);
 
                         if (saveModule !== undefined) {
                             module.numberBought = saveModule.numberBought;
@@ -628,8 +628,8 @@ export default defineComponent({
                 });
 
                 this.bpsBuffsModules.forEach(module => {
-                    if (saveFile.bpsBuffsModules) {
-                        let saveModule = saveFile.bpsBuffsModules.find(saveModule => saveModule.slug === module.slug);
+                    if (clickerSaveFile.bpsBuffsModules) {
+                        const saveModule = clickerSaveFile.bpsBuffsModules.find(saveModule => saveModule.slug === module.slug);
 
                         if (saveModule !== undefined) {
                             module.numberBought = saveModule.numberBought;
@@ -638,8 +638,8 @@ export default defineComponent({
                 });
 
                 this.achievements.forEach(achievement => {
-                    if (saveFile.achievements) {
-                        let saveAchievement = saveFile.achievements.find(saveAchievement => saveAchievement.name === achievement.name);
+                    if (clickerSaveFile.achievements) {
+                        const saveAchievement = clickerSaveFile.achievements.find(saveAchievement => saveAchievement.name === achievement.name);
 
                         if (saveAchievement !== undefined) {
                             achievement.unlocked = saveAchievement.unlocked;
