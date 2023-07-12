@@ -1,8 +1,8 @@
 <template>
     <app-bar @change-page="(value) => page = value" :achievements="achievements.filter((a) => a.unlocked === true && a.seen === false).length"></app-bar>
 
-    <div class="tw-max-w-full tw-m-auto tw-pl-14">
-        <div class="tw-flex tw-justify-center tw-gap-5">
+    <div class="tw-max-w-full tw-m-auto tw-pl-14 tw-h-full">
+        <div class="tw-flex tw-justify-center tw-gap-5 tw-h-[12vh]">
             <h1 class="tw-text-6xl tw-text-center tw-py-10 tw-text-green-dark tw-font-medium">
                 Banana Clicker
             </h1>
@@ -12,27 +12,29 @@
             </h1>
         </div>
 
-        <clique
-            v-show="page === 'click'"
-            @achievements-updated="(ach) => this.achievements = ach">
-        </clique>
+        <div class="tw-h-[88vh]">
+            <clique
+                v-show="page === 'click'"
+                @achievements-updated="(ach) => this.achievements = ach">
+            </clique>
 
-        <exploration
-            v-show="page === 'exploration'">
-        </exploration>
+            <exploration
+                v-show="page === 'exploration'">
+            </exploration>
 
-        <achievements
-            v-show="page === 'achievements'"
-            :achievements="achievements">
-        </achievements>
+            <achievements
+                v-show="page === 'achievements'"
+                :achievements="achievements">
+            </achievements>
 
-        <settings
-            v-show="page === 'settings'">
-        </settings>
+            <settings
+                v-show="page === 'settings'">
+            </settings>
 
-        <about
-            v-show="page === 'about'">
-        </about>
+            <about
+                v-show="page === 'about'">
+            </about>
+        </div>
     </div>
 </template>
 
