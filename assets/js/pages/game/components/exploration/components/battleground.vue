@@ -1,5 +1,5 @@
 <template>
-    <div class="tw-grid tw-grid-cols-5 tw-gap-3 tw-p-5 tw-w-full">
+    <div class="tw-grid tw-grid-cols-5 tw-gap-3 tw-p-5 tw-w-full tw-h-full">
         <div class="tw-col-span-1 tw-rounded-2xl tw-bg-white tw-p-5 tw-bg-cover tw-shadow-xl">
             <h2 class="tw-text-2xl tw-font-bold tw-text-center tw-mb-5 tw-text">{{ hero.name }}</h2>
 
@@ -65,12 +65,8 @@
         </div>
 
         <div class="tw-col-span-3 tw-w-full tw-flex tw-flex-col tw-items-center tw-justify-center">
-            <div class="tw-w-full tw-flex tw-justify-center">
-                <h2 class="tw-text-white tw-font-black tw-text-2xl">Zone {{ zoneIndex + 1 }}-{{ monstersBeaten + 1 }}</h2>
-            </div>
-
             <div class="tw-text-white tw-p-10 tw-w-full tw-relative">
-                <div v-if="hero.life.current > 0" class="tw-flex tw-flex-col tw-items-center ">
+                <div v-if="hero.life.current > 0" class="tw-flex tw-flex-col tw-items-center tw-justify-between">
                     <div class="tw-grid tw-grid-cols-12 tw-pt-16">
                         <Hero :hero="hero" :hero-name="heroName" class="tw-col-span-3 tw-flex tw-justify-center"></Hero>
 
